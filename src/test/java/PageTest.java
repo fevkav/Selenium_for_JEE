@@ -2,7 +2,6 @@ import config.ConfigProperties;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
 import pageobjects.Page;
 
 import java.util.ArrayList;
@@ -10,7 +9,6 @@ import java.util.ArrayList;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
-import static org.hamcrest.core.IsNull.nullValue;
 import static org.hamcrest.core.StringStartsWith.startsWith;
 
 
@@ -25,7 +23,6 @@ public class PageTest {
     @BeforeClass
     public static void setUp() {
         page = new MockPage();
-        pages.add(page);
     }
 
     @Test
@@ -46,8 +43,8 @@ public class PageTest {
     }
 
     @AfterClass
-    public static void closeDrivers() {
-        pages.forEach(page -> page.quitDriver());
+    public static void closeDriver() {
+        page.quitDriver();
     }
 
 }

@@ -8,19 +8,32 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 /**
- * First page you see after calling the root url.
+ * First page you see after calling the root url, including the login.
+ * To find WebElements within this page object, the PageFactory class is used.
  */
 public class LoginPage extends Page {
 
+    /**
+     * The drop-down list for the language selection.
+     */
     @FindBy(xpath = "//select[@id='headerSelectLanguage']")
     private WebElement selectLanguage;
 
+    /**
+     * The textinput field for the username.
+     */
     @FindBy(xpath = "//input[@id='LoginUserName']")
     private WebElement textinputUser;
 
+    /**
+     * The textinput field for the password.
+     */
     @FindBy(xpath = "//input[@id='LoginPassword']")
     private WebElement textinputPassword;
 
+    /**
+     * The submit button to submit the credentials.
+     */
     @FindBy(xpath = "//input[@type='submit']")
     private WebElement submitButton;
 
@@ -61,6 +74,10 @@ public class LoginPage extends Page {
         return true;
     }
 
+    public WebElement getSelectLanguage() {
+        return selectLanguage;
+    }
+
     public WebElement getTextinputUser() {
         return textinputUser;
     }
@@ -68,5 +85,4 @@ public class LoginPage extends Page {
     public WebElement getTextinputPassword() {
         return textinputPassword;
     }
-
 }

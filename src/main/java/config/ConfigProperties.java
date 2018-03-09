@@ -6,19 +6,23 @@ import java.io.IOException;
 import java.util.Base64;
 import java.util.Properties;
 
+/**
+ * A helper class to get the properties from the application.properties file, e.g. user and password to login
+ * or locators such as id to find WebElements.
+ */
 public class ConfigProperties {
 
     private static Properties properties;
 
-    public static final String propertyFilePath = System.getProperty("user.dir") + "\\application.properties";
+    private static final String propertyFilePath = System.getProperty("user.dir") + "\\application.properties";
 
-    /******************************************************************************/
-    /* Keys for application.properties */
+    /*******************************   KEYS SECTION   ******************************/
 
-    public static final String KEY_ROOTURL = "rooturl";
-    public static final String KEY_LOGOID = "logoId";
-    public static final String KEY_USER = "user";
-    public static final String KEY_PASSWORD = "pw";
+
+    private static final String KEY_ROOTURL = "rooturl";
+    private static final String KEY_LOGOID = "logoId";
+    private static final String KEY_USER = "user";
+    private static final String KEY_PASSWORD = "pw";
 
 
     /******************************************************************************/
@@ -44,6 +48,9 @@ public class ConfigProperties {
         }
     }
 
+    /**
+     * @return the complete root URL specified in application.properties.
+     */
     public String getRootUrl() {
         String value = properties.getProperty(KEY_ROOTURL);
         if (value != null)
@@ -66,8 +73,7 @@ public class ConfigProperties {
         if (value != null){
             value = String.valueOf(Base64.getDecoder().decode(value));
             return value;
-        }
-        else
+        } else
             throw new RuntimeException(KEY_PASSWORD + " not specified in application.properties");
 
     }

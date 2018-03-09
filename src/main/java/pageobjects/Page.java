@@ -1,18 +1,10 @@
 package pageobjects;
 
 import config.ConfigProperties;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,7 +18,9 @@ public abstract class Page {
 
     private ConfigProperties config;
 
-
+    /**
+     * @param driver the driver to use for this page.
+     */
     public Page(WebDriver driver) {
         this.driver = driver;
         this.driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
@@ -34,6 +28,9 @@ public abstract class Page {
         config = new ConfigProperties();
     }
 
+    /**
+     * Constructor with a HtmlUnitDriver.
+     */
     public Page() {
         this(new HtmlUnitDriver());
     }
@@ -50,21 +47,23 @@ public abstract class Page {
         this.driver.get(url);
     }
 
+    /**
+     *
+     */
     public void quitDriver() {
         this.driver.quit();
     }
 
     /**
-     * Returns the current title of this page.
-     * @return
+     * @return the current title of this page.
      */
     public String getTitle() {
         return this.driver.getTitle();
     }
 
     /**
-     * Returns the current URL of this page.
-     * @return
+     *
+     * @return the current URL of this page.
      */
     public String getUrl() {
         return this.driver.getCurrentUrl();
@@ -72,8 +71,8 @@ public abstract class Page {
 
     // TODO semantisch falsch, da nur auf den div-Block geschaut wird. macht nur sinn, wenn auf jeder seite ein logo sein soll
     // https://sqa.stackexchange.com/questions/12912/how-to-check-is-image-is-loaded-or-not-in-selenium
-    public boolean isLogoDisplayed() {
-        return this.driver.findElement(By.id(config.getlogoId())).isDisplayed();
-    }
+//    public boolean isLogoDisplayed() {
+//        return this.driver.findElement(By.id(config.getlogoId())).isDisplayed();
+//    }
 
 }
