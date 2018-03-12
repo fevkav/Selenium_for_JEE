@@ -1,60 +1,61 @@
 package operation;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mockito;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
+import pageobjects.LoginPage;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
+/* TODO bad practise. Test sollte unabhängig von nicht zu testenden objekten sein
+ => textiput und select mocken */
 public class UIOperationTest {
-
-    private static WebElement textInputUserMock;
-    private static WebElement textInputPasswordMock;
-    private static WebElement selectMock;
 
     private static final String userValue = "MaxMustermann@max.net";
     private static final String passwordValue = "Qjuz385#+>_";
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-
-        textInputUserMock = Mockito.mock(WebElement.class);
-        textInputPasswordMock = Mockito.mock(WebElement.class);
-
-        Mockito.when(textInputUserMock.getAttribute("value")).thenReturn(userValue);
-        Mockito.when(textInputPasswordMock.getAttribute("value")).thenReturn(passwordValue);
-
-    }
-
     @Test
     public void typeInTextfieldTest() throws Exception {
 
+        LoginPage page = new LoginPage();
+        page.navigateToRootUrl();
+        WebElement textInputUser = page.getTextinputUser();
+        WebElement textInputPassword = page.getTextinputPassword();
 
-        UIOperation.typeInTextfield(textInputUserMock, userValue);
-        UIOperation.typeInTextfield(textInputPasswordMock, passwordValue);
+        UIOperation.typeInTextfield(textInputUser, userValue);
+        UIOperation.typeInTextfield(textInputPassword, passwordValue);
 
         assertThat("Could not type in textfield username",
-                textInputUserMock.getAttribute("value"), is(userValue));
+                page.getTextinputUser().getAttribute("value"), is(userValue));
 
         assertThat("Could not type in textfield password",
-                textInputPasswordMock.getAttribute("value"), is(passwordValue));
+                page.getTextinputPassword().getAttribute("value"), is(passwordValue));
     }
 
     @Test(expected = UnexpectedTagNameException.class)
     public void selectFromNonSelectElementShouldThrowException() {
-        UIOperation.selectOptionFromSelectByValue(textInputPasswordMock, "option");
+
+        WebElement emptyElement = mock(WebElement.class);
+        UIOperation.selectOptionFromSelectElementByValue(emptyElement, "option 1");
     }
 
-    private WebElement mockTextFieldElement() {
-        // getTagname muss input sein
+    @Test
+    public void selectOptionFromSelectByValueTest() {
 
-        // getattribute("type") muss text sein
+        LoginPage page = new LoginPage(new ChromeDriver());
+        page.navigateToRootUrl();
 
-        // getattribute("value")
+        UIOperation.selectOptionFromSelectElementByValue(page.getSelectLanguage(), "en_GB");
 
-        return null;
+        Select select = new Select(page.getSelectLanguage());
+        assertThat("Select failed!",
+                select.getFirstSelectedOption().getAttribute("value"), is("en_GB"));
+
     }
+
+
 }

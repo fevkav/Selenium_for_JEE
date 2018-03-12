@@ -3,6 +3,7 @@ package pageobjects;
 import config.ConfigProperties;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
@@ -16,7 +17,7 @@ public abstract class Page {
 
     protected WebDriverWait wait;
 
-    private ConfigProperties config;
+    protected ConfigProperties config;
 
     /**
      * @param driver the driver to use for this page.
@@ -26,6 +27,7 @@ public abstract class Page {
         this.driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         this.wait = new WebDriverWait(driver, 30);
         config = new ConfigProperties();
+        PageFactory.initElements(driver, this);
     }
 
     /**

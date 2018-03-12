@@ -71,7 +71,7 @@ public class ConfigProperties {
     public String getPassword() {
         String value = properties.getProperty(KEY_PASSWORD);
         if (value != null){
-            value = String.valueOf(Base64.getDecoder().decode(value));
+            value = new String(Base64.getDecoder().decode(value.getBytes()));
             return value;
         } else
             throw new RuntimeException(KEY_PASSWORD + " not specified in application.properties");
