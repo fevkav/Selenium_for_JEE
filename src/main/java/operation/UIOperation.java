@@ -30,6 +30,7 @@ public class UIOperation {
 
         Select selectElement = new Select(select);
         selectElement.selectByValue(optionValue);
+
     }
 
     public static void click(WebElement element) {

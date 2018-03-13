@@ -71,7 +71,7 @@ public class LoginPage extends Page {
         return true;
     }
 
-    public Page navigateAndLogin() {
+    public Page navigateToLoginPageAndLogin() {
 
         navigateToRootUrl();
         UIOperation.typeInTextfield(textinputUser, config.getUser());

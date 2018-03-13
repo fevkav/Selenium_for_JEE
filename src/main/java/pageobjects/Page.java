@@ -71,6 +71,11 @@ public abstract class Page {
         return this.driver.getCurrentUrl();
     }
 
+    public String getLanguage() {
+        int startIndexOfLanguage = getUrl().indexOf("language=") + 9;
+        return getUrl().substring(startIndexOfLanguage, startIndexOfLanguage + 5);
+    }
+
     // TODO semantisch falsch, da nur auf den div-Block geschaut wird. macht nur sinn, wenn auf jeder seite ein logo sein soll
     // https://sqa.stackexchange.com/questions/12912/how-to-check-is-image-is-loaded-or-not-in-selenium
 //    public boolean isLogoDisplayed() {

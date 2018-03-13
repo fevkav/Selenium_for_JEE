@@ -3,7 +3,6 @@ import org.junit.Before;
 import org.junit.Test;
 import pageobjects.LoginPage;
 import pageobjects.Page;
-import pageobjects.RolePage;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -21,8 +20,6 @@ public class LoginPageTest {
 
     /**
      * NOTE: testing of title and url of the Login Page is provided in PageTest, because it's the same page
-     *
-     *
      */
     @Test
     public void isLoginPageLoadedTest() {
@@ -32,18 +29,12 @@ public class LoginPageTest {
     }
 
     @Test
-    public void navigateAndLoginTest() {
-        Page pageAfterLogin = loginpage.navigateAndLogin();
+    public void navigateToLoginPageAndLoginTest() {
+        Page pageAfterLogin = loginpage.navigateToLoginPageAndLogin();
 
         assertThat("Login failed! The page title ends with \"Login\"",
                 pageAfterLogin.getTitle(), not(endsWith("Login")));
 
-
-        assertThat("Fail to load Role Page. Could not locate role links",
-                ((RolePage) pageAfterLogin).getRoleElements().isEmpty(), is(false));
-
-        assertThat("Fail to laod Role Page. Return type of navigateAndLogin() is not a RolePage",
-                pageAfterLogin, instanceOf(RolePage.class));
 
     }
 
