@@ -1,9 +1,7 @@
 package pageobjects;
 
 import operation.UIOperation;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
@@ -46,7 +44,6 @@ public class LoginPage extends Page {
     }
 
     /**
-     *
      * @return True if the login form with language selection, username/password input, submit button
      * is clickable.
      */
@@ -78,7 +75,13 @@ public class LoginPage extends Page {
         UIOperation.typeInTextfield(textinputPassword, config.getPassword());
         UIOperation.click(submitButton);
 
-        return new RolePage(driver);
+        try {
+            driver.findElement(By.id("LoginWrongUserNameOrPasswordMessage"));
+        } catch (NoSuchElementException e) {
+            return new RolePage(driver);
+        }
+
+        throw new RuntimeException("Wrong Username/Password");
 
     }
 

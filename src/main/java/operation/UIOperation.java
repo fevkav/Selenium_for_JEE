@@ -15,7 +15,8 @@ public class UIOperation {
     public static void typeInTextfield(WebElement textinput, String keys) throws RuntimeException {
 
         if (!textinput.getTagName().equals("input") && !textinput.getAttribute("type").equals("text")) {
-            throw new RuntimeException("Given WebElement in typeInTextfield(WebElement, String) is not a textinput field");
+            throw new RuntimeException(
+                    "Given WebElement in typeInTextfield(WebElement, String) is not a textinput field");
         }
 
         textinput.sendKeys(keys);
@@ -23,7 +24,7 @@ public class UIOperation {
 
     /**
      * @param select      drop-down list as a html select-tag
-     * @param optionValue
+     * @param optionValue optionvalue
      * @throws org.openqa.selenium.support.ui.UnexpectedTagNameException if select is not a select tag
      */
     public static void selectOptionFromSelectElementByValue(WebElement select, String optionValue) {

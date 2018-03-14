@@ -34,7 +34,7 @@ public abstract class Page {
      * Constructor with a HtmlUnitDriver.
      */
     public Page() {
-        this(new HtmlUnitDriver());
+        this(new HtmlUnitDriver(true));
     }
 
     /**
@@ -81,5 +81,6 @@ public abstract class Page {
 //    public boolean isLogoDisplayed() {
 //        return this.driver.findElement(By.id(config.getlogoId())).isDisplayed();
 //    }
+
 
 }

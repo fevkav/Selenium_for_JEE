@@ -53,10 +53,51 @@ public class RolePageTest {
         assertThat(idsActual, containsInAnyOrder(idsExpected.toArray()));
     }
 
+    @Test
+    public void selectRoleMandatorTest() {
+        rolePage.selectRole("Mandator");
+    }
+
+    @Test
+    public void selectRoleSystemAdminTest() {
+        rolePage.selectRole("SystemAdmin");
+    }
+
+    @Test
+    public void selectRoleOperatorTest() {
+        rolePage.selectRole("Operator");
+    }
+
+    @Test
+    public void selectRoleControllerTest() {
+        rolePage.selectRole("Controller");
+    }
+
+    @Test
+    public void selectRoleApproverTest() {
+        rolePage.selectRole("Approver");
+    }
+
+    /**
+     * NOTE: Does not work with HtmlUnitDriver without javascript enabled
+     */
+    @Test
+    public void changeRoleTest() {
+
+        LoginPage login = new LoginPage();
+        RolePage role = (RolePage) login.navigateToLoginPageAndLogin();
+        role.selectRole("Mandator");
+        role.changeRole("Operator");
+
+        login.quitDriver();
+        role.quitDriver();
+    }
+
     @After
     public void quitDriver() {
         loginpage.quitDriver();
         rolePage.quitDriver();
+
     }
 
 

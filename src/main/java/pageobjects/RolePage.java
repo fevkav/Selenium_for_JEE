@@ -1,10 +1,13 @@
 package pageobjects;
 
+import operation.UIOperation;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RolePage extends Page {
@@ -13,9 +16,13 @@ public class RolePage extends Page {
      * This element appears after the role is selected, so it can't be initialized within this object instantiation,
      * because this page object contains the role selection page.
      */
-    By roleChangeButtonLocator = By.id("topMenuButtonChangeRole");
+    protected By roleChangeButtonLocator = By.id("topMenuButtonChangeRole");
+
     @FindBy(xpath = "//a[starts-with(@id, \"SelectRoleRole\")]")
     private List<WebElement> roleLinks;
+    By subMenuItemLocator = By.cssSelector("div.mainNaviItemLevel2 > a.mainNaviItem");
+    @FindBy(className = "mainNaviItem")
+    private List<WebElement> mainNaviItems;
 
     public RolePage() {
         super();
@@ -29,23 +36,74 @@ public class RolePage extends Page {
         return roleLinks;
     }
 
-//    public void clickOnRoleLinkAndCheckRole(WebElement roleLink) {
-//
-//        String roleLinkId = roleLink.getAttribute("id");
-//
-//        UIOperation.click(roleLink);
-//
-//        WebElement roleChangeButton = wait.until(ExpectedConditions.elementToBeClickable(roleChangeButtonLocator));
-//        // TODO exception handling
-//
-//        String roleButtonTitle = roleChangeButton.getAttribute("title");
-//
-//        System.out.println("language: " + getLanguage());
-//
-//        if (roleButtonTitle.contains("Role") || roleButtonTitle.contains("Rolle") ) {
-//
-//        }
-//    }
+    public Page selectRole(String role) {
+
+        String roleLinkId = "SelectRoleRole_" + role + ((role.equals("SystemAdmin")) ? "_" : "_METRO AG");
+
+        WebElement roleLink = wait.until(ExpectedConditions.elementToBeClickable(By.id(roleLinkId)));
+        // TODO
+
+
+        UIOperation.click(roleLink);
+
+        System.out.println("Selected role is " + role);
+
+        switch (role) {
+            case "SystemAdmin":
+                return new SystemAdminPage(driver);
+            case "Mandator":
+                return new MandatorPage(driver);
+            case "Operator":
+                return new OperatorPage(driver);
+            case "Controller":
+                return new ControllerPage(driver);
+            case "Approver":
+                return new ApproverPage(driver);
+            default:
+                throw new RuntimeException("Wrong role");
+        }
+    }
+
+    public void changeRole(String role) {
+        WebElement roleChangebutton = wait.until(ExpectedConditions.elementToBeClickable(roleChangeButtonLocator));
+        // TODO exception handling
+
+        UIOperation.click(roleChangebutton);
+        selectRole(role);
+    }
+
+
+    public List<String> getAllMainNaviItemLinkTexts() {
+        List<String> linkTexts = new ArrayList<>();
+        mainNaviItems.forEach(item -> linkTexts.add(item.getText()));
+        return linkTexts;
+    }
+
+    public WebElement getMainNaviItemElementByLinkText(String linktext) {
+        return driver.findElement(By.linkText(linktext));
+    }
+
+    public WebElement getSubMenuItemElementByLinkText(String linktext) {
+        return driver.findElement(By.linkText(linktext));
+    }
+
+    private List<WebElement> getSubMenuItems(WebElement mainNaviElement) {
+        return driver.findElements(subMenuItemLocator);
+    }
+
+    public List<String> getAllSubmenuItemLinkTexts(WebElement mainNaviElement) {
+
+        List<String> linkTexts = new ArrayList<>();
+        getSubMenuItems(mainNaviElement).forEach(item -> linkTexts.add(item.getText()));
+        return linkTexts;
+
+    }
+
+
+
+
+
+
 
 
 }

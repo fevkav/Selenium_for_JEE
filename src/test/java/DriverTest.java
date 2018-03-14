@@ -5,6 +5,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 
 import java.util.ArrayList;
 
@@ -30,6 +31,11 @@ public class DriverTest {
     @Test
     public void htmlUnitTest() {
         drivers.add(new HtmlUnitDriver());
+    }
+
+    @Test
+    public void phantomJSTest() {
+        drivers.add(new PhantomJSDriver());
     }
 
     @After

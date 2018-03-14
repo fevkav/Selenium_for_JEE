@@ -14,7 +14,7 @@ public class ConfigProperties {
 
     private static Properties properties;
 
-    private static final String propertyFilePath = System.getProperty("user.dir") + "\\application.properties";
+    private static final String PROPERTY_FILE_PATH = System.getProperty("user.dir") + "\\application.properties";
 
     /*******************************   KEYS SECTION   ******************************/
 
@@ -31,10 +31,10 @@ public class ConfigProperties {
     }
 
     private void init() {
-        System.out.println("Loading Properties from " + propertyFilePath);
+        System.out.println("Loading Properties from " + PROPERTY_FILE_PATH);
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(propertyFilePath));
+            reader = new BufferedReader(new FileReader(PROPERTY_FILE_PATH));
             properties = new Properties();
             try {
                 properties.load(reader);
@@ -44,7 +44,7 @@ public class ConfigProperties {
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
-            throw new RuntimeException(" application.properties not found at " + propertyFilePath);
+            throw new RuntimeException(" application.properties not found at " + PROPERTY_FILE_PATH);
         }
     }
 
@@ -70,7 +70,7 @@ public class ConfigProperties {
 
     public String getPassword() {
         String value = properties.getProperty(KEY_PASSWORD);
-        if (value != null){
+        if (value != null) {
             value = new String(Base64.getDecoder().decode(value.getBytes()));
             return value;
         } else
