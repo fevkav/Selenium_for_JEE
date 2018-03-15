@@ -34,7 +34,9 @@ public class UIOperationTest {
 
         assertThat("Could not type in textfield password",
                 page.getTextinputPassword().getAttribute("value"), is(passwordValue));
+        page.quitDriver();
     }
+
 
     @Test(expected = UnexpectedTagNameException.class)
     public void selectFromNonSelectElementShouldThrowException() {
@@ -54,6 +56,8 @@ public class UIOperationTest {
         Select select = new Select(page.getSelectLanguage());
         assertThat("Select failed!",
                 select.getFirstSelectedOption().getAttribute("value"), is("en_GB"));
+
+        page.quitDriver();
 
     }
 

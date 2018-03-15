@@ -96,4 +96,10 @@ public class LoginPage extends Page {
     public WebElement getTextinputPassword() {
         return textinputPassword;
     }
+
+    // TODO damit loginpage nicht abstrakt ist. ändern! (RolePage erweitern? oder RolePage und Page zusammenführen?)
+    @Override
+    public Content getCurrentContent() {
+        return new Content(this);
+    }
 }

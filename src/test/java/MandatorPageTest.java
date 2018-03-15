@@ -11,13 +11,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.*;
+
 
 public class MandatorPageTest {
 
     private MandatorPage mandatorPage;
 
-
+    // TODO BeforeClass nutzen
     @Before
     public void startAndLoginAndSelectMandatorRole() {
         mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator");
@@ -50,8 +51,32 @@ public class MandatorPageTest {
     }
 
     @Test
-    public void clickMainNaviWaehrungThenSubmenuZuweisenTest() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Währungen", "Zuweisen");
+    public void checkHeaderOfContentAfterClickMainNaviWaehrungThenSubmenuZuweisen() {
+        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage,
+                "Währungen", "Zuweisen");
+
+        assertThat("Header of content mismatch", mandatorPage.getCurrentContent().getHeadline(),
+                equalTo("Währung zuweisen"));
+    }
+
+    @Test
+    public void checkSubmitButtonsInBuchenFreigeben() {
+        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage,
+                "Buchen", "Daten freigeben");
+
+        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().size(), is(3));
+        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().get(0).getAttribute("value"),
+                is("Freigeben"));
+        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().get(1).getAttribute("value"),
+                is("Ablehnen"));
+        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().get(2).getAttribute("value"),
+                is("Abbrechen"));
+    }
+
+    @Test
+    public void checkSubmitButtonsInAPageWithoutButtons() {
+        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Bank", "Ansehen");
+        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().isEmpty(), is(true));
     }
 
 

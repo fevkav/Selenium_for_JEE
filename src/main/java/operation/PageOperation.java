@@ -1,6 +1,7 @@
 package operation;
 
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import pageobjects.LoginPage;
 import pageobjects.Page;
 import pageobjects.RolePage;
@@ -10,11 +11,11 @@ public class PageOperation {
     /**
      * Uses a HtmlUnitDriver with enabled javascript
      *
-     * @param role
-     * @return
+     * @param role String of the role (e.g. "Mandator")
+     * @return start page of the given role
      */
     public static Page startLoginSelectRole(String role) {
-        LoginPage loginPage = new LoginPage();
+        LoginPage loginPage = new LoginPage(new ChromeDriver());
         RolePage rolePage = (RolePage) loginPage.navigateToLoginPageAndLogin();
 
         return rolePage.selectRole(role);
@@ -30,6 +31,7 @@ public class PageOperation {
 
         UIOperation.click(submenu);
 
+        ((RolePage) page).loadContent();
 
     }
 }

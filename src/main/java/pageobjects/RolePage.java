@@ -20,16 +20,22 @@ public class RolePage extends Page {
 
     @FindBy(xpath = "//a[starts-with(@id, \"SelectRoleRole\")]")
     private List<WebElement> roleLinks;
+
     By subMenuItemLocator = By.cssSelector("div.mainNaviItemLevel2 > a.mainNaviItem");
+
     @FindBy(className = "mainNaviItem")
     private List<WebElement> mainNaviItems;
 
+    private Content currentContent;
+
     public RolePage() {
         super();
+        currentContent = new Content(this);
     }
 
     public RolePage(WebDriver driver) {
         super(driver);
+        currentContent = new Content(this);
     }
 
     public List<WebElement> getRoleLinkElements() {
@@ -100,10 +106,12 @@ public class RolePage extends Page {
     }
 
 
+    public void loadContent() {
+        currentContent = currentContent.load();
+    }
 
-
-
-
-
-
+    @Override
+    public Content getCurrentContent() {
+        return currentContent;
+    }
 }

@@ -78,19 +78,11 @@ public class RolePageTest {
         rolePage.selectRole("Approver");
     }
 
-    /**
-     * NOTE: Does not work with HtmlUnitDriver without javascript enabled
-     */
     @Test
     public void changeRoleTest() {
 
-        LoginPage login = new LoginPage();
-        RolePage role = (RolePage) login.navigateToLoginPageAndLogin();
-        role.selectRole("Mandator");
-        role.changeRole("Operator");
-
-        login.quitDriver();
-        role.quitDriver();
+        rolePage.selectRole("Mandator");
+        rolePage.changeRole("Operator");
     }
 
     @After

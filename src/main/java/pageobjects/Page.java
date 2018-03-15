@@ -31,7 +31,7 @@ public abstract class Page {
     }
 
     /**
-     * Constructor with a HtmlUnitDriver.
+     * Constructor with a javascript enabled HtmlUnitDriver .
      */
     public Page() {
         this(new HtmlUnitDriver(true));
@@ -81,6 +81,8 @@ public abstract class Page {
 //    public boolean isLogoDisplayed() {
 //        return this.driver.findElement(By.id(config.getlogoId())).isDisplayed();
 //    }
+
+    public abstract Content getCurrentContent();
 
 
 }
