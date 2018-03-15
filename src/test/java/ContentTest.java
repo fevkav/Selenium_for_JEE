@@ -14,19 +14,33 @@ public class ContentTest {
     @Before
     public void startLoginSelectMandatorRoleClickMandantBearbeiten() {
         mandatorPage = PageOperation.startLoginSelectRole("Mandator");
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Mandant", "Bearbeiten");
+
     }
 
     @Test
     public void checkHeadlineMandatorBearbeiten() {
+        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Mandant", "Bearbeiten");
         assertThat("Wrong headline in content",
                 mandatorPage.getCurrentContent().getHeadline(), is("Mandant bearbeiten"));
     }
 
     @Test
     public void checkTextInputFieldsOfMandantBearbeiten() {
+        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Mandant", "Bearbeiten");
         mandatorPage.getCurrentContent().printTextInputFieldsPretty();
     }
+
+    @Test
+    public void checkSelectsOfBankkontoAnlegen() {
+        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Bankkonto", "Anlegen");
+        mandatorPage.getCurrentContent().printSelectsPretty();
+    }
+
+
+
+
+
+
 
     @After
     public void quitDriver() {

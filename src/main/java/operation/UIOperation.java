@@ -24,7 +24,7 @@ public class UIOperation {
 
     /**
      * @param select      drop-down list as a html select-tag
-     * @param optionValue optionvalue
+     * @param optionValue option to select
      * @throws org.openqa.selenium.support.ui.UnexpectedTagNameException if select is not a select tag
      */
     public static void selectOptionFromSelectElementByValue(WebElement select, String optionValue) {
