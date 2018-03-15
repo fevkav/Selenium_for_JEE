@@ -21,7 +21,7 @@ public class ContentTest {
     public void checkHeadlineMandatorBearbeiten() {
         PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Mandant", "Bearbeiten");
         assertThat("Wrong headline in content",
-                mandatorPage.getCurrentContent().getHeadline(), is("Mandant bearbeiten"));
+                mandatorPage.getCurrentContent().getHeadlineText(), is("Mandant bearbeiten"));
     }
 
     @Test
@@ -36,11 +36,13 @@ public class ContentTest {
         mandatorPage.getCurrentContent().printSelectsPretty();
     }
 
-
-
-
-
-
+    // "Geldtransportunternehmen ansehen" Seite hat nicht dargestellte link buttons
+    @Test(expected = AssertionError.class)
+    public void linkButtonsInGTUAnsehenTest() {
+        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "GTU", "Ansehen");
+        assertThat("Number of link buttons mismatch", mandatorPage.getCurrentContent().getLinkButtons().size(),
+                is(13));
+    }
 
     @After
     public void quitDriver() {

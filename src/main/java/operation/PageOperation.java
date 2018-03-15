@@ -6,6 +6,9 @@ import pageobjects.LoginPage;
 import pageobjects.Page;
 import pageobjects.RolePage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PageOperation {
 
     /**
@@ -33,5 +36,23 @@ public class PageOperation {
 
         ((RolePage) page).loadContent();
 
+    }
+
+    /**
+     * Checks if the given WebElements contain not displayed WebElements.
+     *
+     * @param elements list of WebElements to check
+     * @return list of not displayed WebElements. null if elements not contain not displayed WebElements.
+     */
+    public static List<WebElement> hasNotDisplayedElements(List<WebElement> elements) {
+        List<WebElement> notDisplayedElements = new ArrayList<>();
+        elements.forEach(linkButton -> {
+            if (!linkButton.isDisplayed())
+                notDisplayedElements.add(linkButton);
+        });
+        if (!notDisplayedElements.isEmpty()) {
+            return notDisplayedElements;
+        }
+        return null;
     }
 }

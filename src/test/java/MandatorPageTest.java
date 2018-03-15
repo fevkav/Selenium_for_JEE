@@ -55,7 +55,7 @@ public class MandatorPageTest {
         PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage,
                 "Währungen", "Zuweisen");
 
-        assertThat("Header of content mismatch", mandatorPage.getCurrentContent().getHeadline(),
+        assertThat("Header of content mismatch", mandatorPage.getCurrentContent().getHeadlineText(),
                 equalTo("Währung zuweisen"));
     }
 
