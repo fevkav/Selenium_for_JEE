@@ -4,7 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-import java.util.*;
+import java.util.List;
 
 public class Content {
 
@@ -18,19 +18,7 @@ public class Content {
     @FindBy(xpath = "//input[@type=\"submit\"]")
     private List<WebElement> submitButtons;
 
-    /**
-     * Contains all text fields (one-line input) in the content.
-     * <p>
-     * Key: value of label element corresponding to the text input element.
-     * Value: text input element.
-     * <p>
-     * NOTE: if no label found for element (for attribute of label not match id attribute of corresponding element),
-     * the key is a iterating number starting with 0 as a String value.
-     */
-    private Map<String, WebElement> labelsAndTextfields;
-    private Map<String, WebElement> labelsAndSelects;
-
-    @FindBy(xpath = "//input[@type=\"text\"]")
+    @FindBy(xpath = "//input[@type=\"text\" and not(contains(@style, \"display: none\"))]")
     private List<WebElement> textfields;
 
     @FindBy(tagName = "label")
@@ -56,38 +44,42 @@ public class Content {
         return this;
     }
 
-    public Map<String, WebElement> joinLabelAndHisWebElements(List<WebElement> elements) {
+    /**
+     * Checks, if the found and displayed textfield's id corresponding to the for attribute of a label.
+     */
+    public void checkLabelsOfTextfields() {
 
-        Map<String, WebElement> labelsAndElements = new HashMap<>();
-        String foundLabel;
+        boolean foundLabel;
 
-        int keyValue = 0;
-        for (WebElement element : elements) {
-            foundLabel = null;
+        for (WebElement textfield : textfields) {
+            foundLabel = false;
             for (WebElement label : labels) {
 
-                if (element.getAttribute("id").equals(label.getAttribute("for"))) {
-                    foundLabel = label.getText();
-                    break;
-                } else if (element.getAttribute("id").toUpperCase()
-                        .contains(label.getAttribute("for").toUpperCase())) {
-                    foundLabel = label.getText();
-                    System.out.println("WARNING: label found, but for attribute does not match corresponding id attribute");
+                try {
+
+                    if (textfield.getAttribute("id").equals(label.getAttribute("for"))) {
+                        foundLabel = true;
+                        break;
+                    } else if (textfield.getAttribute("id").toUpperCase()
+                            .contains(label.getAttribute("for").toUpperCase())) {
+                        foundLabel = true;
+                        System.out.println("WARNING: for attribute of label " + label.getText()
+                                + " does not match corresponding id attribute. for=" + label.getAttribute("for")
+                                + " -> id=" + textfield.getAttribute("id"));
+                        break;
+                    }
+                } catch (NullPointerException e) {
+                    if (textfield.isDisplayed())
+                        System.out.println("WARNING: No id found for element with name " + textfield.getAttribute("name"));
                     break;
                 }
             }
-            if (foundLabel != null) {
-                labelsAndElements.put(foundLabel, element);
-
-            } else {
-                labelsAndElements.put(String.valueOf(keyValue), element);
-                System.out.println("WARNING: No label found for element: " + element.getAttribute("name")
-                        + ". Please check getLabels()");
-                keyValue++;
+            if (!foundLabel) {
+                if (textfield.isDisplayed())
+                    System.out.println("WARNING: No label found for element with name: " + textfield.getAttribute("name"));
             }
-        }
 
-        return labelsAndElements;
+        }
 
     }
 
@@ -100,53 +92,20 @@ public class Content {
         return submitButtons;
     }
 
-    public Collection<WebElement> getLabelsAndTextfields() {
-        return labelsAndTextfields.values();
-    }
-
-
-    private void printPretty(String element) {
-        StringBuilder pretty = new StringBuilder();
-
-        if (labelsAndTextfields == null)
-            labelsAndTextfields = joinLabelAndHisWebElements(textfields);
-        if (labelsAndSelects == null)
-            labelsAndSelects = joinLabelAndHisWebElements(selects);
-
-        Iterator<Map.Entry<String, WebElement>> iterator = (element.equals("textfield"))
-                ? labelsAndTextfields.entrySet().iterator()
-                : (element.equals("select"))
-                ? labelsAndSelects.entrySet().iterator()
-                : null;
-
-        while (iterator.hasNext()) {
-            Map.Entry<String, WebElement> entry = iterator.next();
-            pretty.append("label " + entry.getKey());
-            pretty.append(" | " + element + " name: " + entry.getValue().getAttribute("name"));
-            pretty.append(" | " + element + " value: " + entry.getValue().getAttribute("value"));
-            pretty.append(System.getProperty("line.separator"));
-        }
-        System.out.println(pretty);
-
-    }
-
-    public void printTextInputFieldsPretty() {
-        printPretty("textfield");
-    }
-
-    public void printSelectsPretty() {
-        printPretty("select");
-    }
-
-    public Collection<WebElement> getLabelsAndSelects() {
-        return labelsAndSelects.values();
-    }
 
     public List<WebElement> getLabels() {
         return labels;
     }
 
+    public List<WebElement> getTextfields() {
+        return textfields;
+    }
+
     public List<WebElement> getLinkButtons() {
         return linkButtons;
+    }
+
+    public List<WebElement> getSelects() {
+        return selects;
     }
 }

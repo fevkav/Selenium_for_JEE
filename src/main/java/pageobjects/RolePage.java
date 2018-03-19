@@ -23,7 +23,9 @@ public class RolePage extends Page {
 
     By subMenuItemLocator = By.cssSelector("div.mainNaviItemLevel2 > a.mainNaviItem");
 
-    @FindBy(className = "mainNaviItem")
+
+    //    @FindBy(className = "mainNaviItem") => falsch, findet auch submenus
+    @FindBy(css = "div.mainNaviItemLevel1 > a.mainNaviItem")
     private List<WebElement> mainNaviItems;
 
     private Content currentContent;
@@ -89,6 +91,12 @@ public class RolePage extends Page {
         return driver.findElement(By.linkText(linktext));
     }
 
+    /**
+     * NOTE: Main navi has to be clicked on.
+     *
+     * @param linktext the exact displayed link text in selected language
+     * @return the submenu link as WebElement
+     */
     public WebElement getSubMenuItemElementByLinkText(String linktext) {
         return driver.findElement(By.linkText(linktext));
     }
@@ -97,12 +105,30 @@ public class RolePage extends Page {
         return driver.findElements(subMenuItemLocator);
     }
 
+    /**
+     * First clicks on given main menu. then returns the "create" submenu, if exists.
+     *
+     * @param mainNaviElement main menu element
+     * @return the clicked create submenu. null if given main menu doesn't contain a create submenu
+     */
+    public WebElement getCreateSubmenu(WebElement mainNaviElement) {
+        UIOperation.click(mainNaviElement);
+        try {
+            WebElement submenu = driver.findElement(By.xpath("//a[contains(@href, \"add=click\")]"));
+            return submenu;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+
+
     public List<String> getAllSubmenuItemLinkTexts(WebElement mainNaviElement) {
+
 
         List<String> linkTexts = new ArrayList<>();
         getSubMenuItems(mainNaviElement).forEach(item -> linkTexts.add(item.getText()));
         return linkTexts;
-
     }
 
 
@@ -113,5 +139,9 @@ public class RolePage extends Page {
     @Override
     public Content getCurrentContent() {
         return currentContent;
+    }
+
+    public List<WebElement> getAllMainNaviItems() {
+        return mainNaviItems;
     }
 }

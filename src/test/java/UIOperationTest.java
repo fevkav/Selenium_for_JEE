@@ -1,5 +1,5 @@
-package operation;
 
+import operation.UIOperation;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;

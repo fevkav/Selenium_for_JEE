@@ -2,47 +2,58 @@ import operation.PageOperation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import pageobjects.Page;
+import pageobjects.MandatorPage;
+import pageobjects.RolePage;
+
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 
 public class ContentTest {
 
-    private Page mandatorPage;
+    private RolePage mandatorPage;
 
     @Before
-    public void startLoginSelectMandatorRoleClickMandantBearbeiten() {
-        mandatorPage = PageOperation.startLoginSelectRole("Mandator");
+    public void startLoginSelectMandatorRole() {
+        mandatorPage = (RolePage) PageOperation.startLoginSelectRole("Mandator");
 
     }
 
     @Test
     public void checkHeadlineMandatorBearbeiten() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Mandant", "Bearbeiten");
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Mandant", "Bearbeiten");
         assertThat("Wrong headline in content",
                 mandatorPage.getCurrentContent().getHeadlineText(), is("Mandant bearbeiten"));
     }
 
-    @Test
-    public void checkTextInputFieldsOfMandantBearbeiten() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Mandant", "Bearbeiten");
-        mandatorPage.getCurrentContent().printTextInputFieldsPretty();
-    }
 
     @Test
-    public void checkSelectsOfBankkontoAnlegen() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Bankkonto", "Anlegen");
-        mandatorPage.getCurrentContent().printSelectsPretty();
+    public void checkLabelsForTextInputFieldsInMandantBearbeiten() {
+
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Mandant", "Bearbeiten");
+        mandatorPage.getCurrentContent().checkLabelsOfTextfields();
     }
 
-    // "Geldtransportunternehmen ansehen" Seite hat nicht dargestellte link buttons
+    /**
+     * Page "GTU Ansehen" has undisplayed link buttons?
+     */
     @Test(expected = AssertionError.class)
-    public void linkButtonsInGTUAnsehenTest() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "GTU", "Ansehen");
-        assertThat("Number of link buttons mismatch", mandatorPage.getCurrentContent().getLinkButtons().size(),
-                is(13));
+    public void checkIfGTUAnsehenHasUndisplayedLinkButtons() {
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "GTU", "Ansehen");
+        assertThat("GTU Ansehen has undisplayed linkbuttons", PageOperation.hasNotDisplayedElements(
+                mandatorPage.getCurrentContent().getLinkButtons()), nullValue());
     }
+
+    @Test
+    public void clickAndCheckLinkTextsOfAllMainNaviElementsOfMandatorRole() {
+
+        List<String> linkTextsExpected = ((MandatorPage) mandatorPage).getGermanMainNavis();
+
+        assertThat("Wrong main navigation items", PageOperation.clickOnAllMainNavisAndReturnLinkTexts(mandatorPage),
+                containsInAnyOrder(linkTextsExpected.toArray()));
+    }
+
 
     @After
     public void quitDriver() {

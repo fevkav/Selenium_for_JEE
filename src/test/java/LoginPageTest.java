@@ -18,9 +18,6 @@ public class LoginPageTest {
 
     }
 
-    /**
-     * NOTE: testing of title and url of the Login Page is provided in PageTest, because it's the same page
-     */
     @Test
     public void isLoginPageLoadedTest() {
 

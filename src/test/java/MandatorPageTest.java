@@ -1,4 +1,3 @@
-package pageobjects;
 
 import operation.PageOperation;
 import operation.UIOperation;
@@ -6,6 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
+import pageobjects.MandatorPage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +18,6 @@ public class MandatorPageTest {
 
     private MandatorPage mandatorPage;
 
-    // TODO BeforeClass nutzen
     @Before
     public void startAndLoginAndSelectMandatorRole() {
         mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator");
@@ -27,10 +26,7 @@ public class MandatorPageTest {
     @Test
     public void checkAllMainNaviItems() {
 
-        List<String> linkTextsExpected = Arrays.asList("Home", "Währungen", "Mandant", "Bank", "GTU", "Cashcenter",
-                "Bankkonto", "Organisationseinheit", "Gesellschaft", "Markt", "Ebenen", "Workflow", "Kontenselektion",
-                "GTU-Versicherungen", "Leistungsverzeichnisse", "Rahmenvertrag", "Wechselgeld", "Buchen", "Münzgeldtabelle",
-                "Berichte", "Managementberichte");
+        List<String> linkTextsExpected = mandatorPage.getGermanMainNavis();
 
         assertThat("Wrong main navigation items", mandatorPage.getAllMainNaviItemLinkTexts(),
                 containsInAnyOrder(linkTextsExpected.toArray()));
@@ -52,7 +48,7 @@ public class MandatorPageTest {
 
     @Test
     public void checkHeaderOfContentAfterClickMainNaviWaehrungThenSubmenuZuweisen() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage,
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage,
                 "Währungen", "Zuweisen");
 
         assertThat("Header of content mismatch", mandatorPage.getCurrentContent().getHeadlineText(),
@@ -61,7 +57,7 @@ public class MandatorPageTest {
 
     @Test
     public void checkSubmitButtonsInBuchenFreigeben() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage,
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage,
                 "Buchen", "Daten freigeben");
 
         assertThat(mandatorPage.getCurrentContent().getSubmitButtons().size(), is(3));
@@ -75,7 +71,7 @@ public class MandatorPageTest {
 
     @Test
     public void checkSubmitButtonsInAPageWithoutButtons() {
-        PageOperation.clickMainNaviItemThenSubmenuItem(mandatorPage, "Bank", "Ansehen");
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Bank", "Ansehen");
         assertThat(mandatorPage.getCurrentContent().getSubmitButtons().isEmpty(), is(true));
     }
 
