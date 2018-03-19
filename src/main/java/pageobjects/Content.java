@@ -35,6 +35,7 @@ public class Content {
 
     public Content(Page page) {
         this.page = page;
+        load();
     }
 
     protected Content load() {
