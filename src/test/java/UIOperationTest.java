@@ -1,4 +1,5 @@
 
+import operation.PageOperation;
 import operation.UIOperation;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
@@ -6,6 +7,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.UnexpectedTagNameException;
 import pageobjects.LoginPage;
+import pageobjects.RolePage;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertThat;
@@ -45,6 +50,21 @@ public class UIOperationTest {
         UIOperation.selectOptionFromSelectElementByValue(emptyElement, "option 1");
     }
 
+    // TODO bad smells
+    @Test
+    public void checkOptionsFromSelectInBankkontoAnlegen() {
+        RolePage mandatorPage = (RolePage) PageOperation.startLoginSelectRole("Mandator");
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Bankkonto", "Anlegen");
+
+        List<String> expectedOptionsWaehrung = Arrays.asList("", "EUR");
+
+        WebElement selectWaehrung = mandatorPage.getCurrentContent().getSelects().get(1);
+
+        assertThat("option visible texts mismatch", UIOperation.getOptionsVisibleTextsFromSelect(selectWaehrung)
+                , is(expectedOptionsWaehrung));
+
+    }
+
     @Test
     public void selectOptionFromSelectByValueTest() {
 
@@ -58,7 +78,6 @@ public class UIOperationTest {
                 select.getFirstSelectedOption().getAttribute("value"), is("en_GB"));
 
         page.quitDriver();
-
     }
 
 
