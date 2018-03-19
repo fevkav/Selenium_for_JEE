@@ -22,18 +22,46 @@ public class UIOperation {
                     "Given WebElement in typeInTextfield(WebElement, String) is not a textinput field");
         }
 
+        textinput.clear();
         textinput.sendKeys(keys);
     }
 
     /**
+     * Selects option from drop-down by option value
      * @param select      drop-down list as a html select-tag
-     * @param optionValue option to select
+     * @param optionValue option's value to select
      * @throws org.openqa.selenium.support.ui.UnexpectedTagNameException if select is not a select tag
      */
-    public static void selectOptionFromSelectElementByValue(WebElement select, String optionValue) {
+    public static void selectOptionFromSelectElement(WebElement select, String optionValue) {
 
         Select selectElement = new Select(select);
         selectElement.selectByValue(optionValue);
+
+    }
+
+    /**
+     * Selects option from drop-down by index
+     *
+     * @param select drop-down list as a html select-tag
+     * @param index  option's index to select
+     */
+    public static void selectOptionFromSelectElement(WebElement select, int index) {
+
+        Select selectElement = new Select(select);
+        selectElement.selectByIndex(index);
+
+    }
+
+    /**
+     * Selects option from drop-down by visible text
+     *
+     * @param select      drop-down list as a html select-tag
+     * @param visibleText option's visible text to select
+     */
+    public static void selectOptionByVisibleText(WebElement select, String visibleText) {
+
+        Select selectElement = new Select(select);
+        selectElement.selectByVisibleText(visibleText);
 
     }
 
