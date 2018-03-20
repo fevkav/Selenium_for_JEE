@@ -1,3 +1,4 @@
+import operation.ContentOperation;
 import operation.PageOperation;
 import operation.UIOperation;
 import org.junit.AfterClass;
@@ -33,10 +34,11 @@ public class CreateEditDeletePagesTest {
 
         PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Bankkonto", "Anlegen");
 
-        fillBankkontoAnlegen("TESTEINGABE");
+        ContentOperation.fillCreatePage(mandatorPage.getCurrentContent());
 
         assertThat("headline mismatch. Might not have been saved.", mandatorPage.getCurrentContent().getHeadlineText()
                 , is("Ihre Daten wurden gespeichert!"));
+
 
     }
 
@@ -51,47 +53,10 @@ public class CreateEditDeletePagesTest {
         // auf bearbeiten klicken
         UIOperation.click(mandatorPage.getCurrentContent().getSubmitButtons().get(0));
 
-        fillBankkontoAnlegen("TESTEDITTED");
-
         assertThat("headline mismatch. Might not have been editted.", mandatorPage.getCurrentContent().getHeadlineText()
                 , is("Ihre Daten wurden gespeichert!"));
 
 
     }
-
-    private void fillBankkontoAnlegen(String testInput) {
-
-        List<WebElement> textfields = mandatorPage.getCurrentContent().getTextfields();
-        List<WebElement> selects = mandatorPage.getCurrentContent().getSelects();
-        List<WebElement> submitButtons = mandatorPage.getCurrentContent().getSubmitButtons();
-
-        // Textfelder füllen
-        for (WebElement tf : textfields) {
-            UIOperation.typeInTextfield(tf, testInput);
-        }
-
-        // 1. index aus selects auswählen
-        for (WebElement select : selects) {
-            UIOperation.selectOptionFromSelectElement(select, 1);
-        }
-
-        submitButtons.forEach(btn -> System.out.println(btn.getAttribute("value")));
-        // Weiter klicken
-        for (WebElement button : submitButtons) {
-            if (button.getAttribute("value").contains("Weiter")) {
-                UIOperation.click(button);
-                break;
-            }
-        }
-
-        for (WebElement button : submitButtons) {
-            if (button.getAttribute("value").contains("Speichern")) {
-                UIOperation.click(button);
-                break;
-            }
-        }
-
-    }
-
 
 }

@@ -93,6 +93,28 @@ public class Content {
         return submitButtons;
     }
 
+    public WebElement getContinueButton() {
+
+        for (WebElement webElement : submitButtons) {
+            if (webElement.getAttribute("value").contains("Weiter")) {
+                return webElement;
+            }
+        }
+
+        return null;
+    }
+
+    public WebElement getSaveButton() {
+
+        for (WebElement webElement : submitButtons) {
+            if (webElement.getAttribute("value").contains("Speichern")) {
+                return webElement;
+            }
+        }
+
+        return null;
+    }
+
 
     public List<WebElement> getLabels() {
         return labels;
