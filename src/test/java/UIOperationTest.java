@@ -47,7 +47,7 @@ public class UIOperationTest {
     public void selectFromNonSelectElementShouldThrowException() {
 
         WebElement emptyElement = mock(WebElement.class);
-        UIOperation.selectOptionFromSelectElementByValue(emptyElement, "option 1");
+        UIOperation.selectOptionFromSelectElement(emptyElement, "option 1");
     }
 
     // TODO bad smells
@@ -71,7 +71,7 @@ public class UIOperationTest {
         LoginPage page = new LoginPage(new ChromeDriver());
         page.navigateToRootUrl();
 
-        UIOperation.selectOptionFromSelectElementByValue(page.getSelectLanguage(), "en_GB");
+        UIOperation.selectOptionFromSelectElement(page.getSelectLanguage(), "en_GB");
 
         Select select = new Select(page.getSelectLanguage());
         assertThat("Select failed!",
