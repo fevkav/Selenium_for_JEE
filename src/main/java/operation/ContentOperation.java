@@ -7,6 +7,7 @@ import pageobjects.Content;
 
 import java.util.List;
 
+
 public class ContentOperation {
 
     private static final String TESTSTRING = "Testinput";
@@ -20,22 +21,23 @@ public class ContentOperation {
     private static final String TESTPHONE = "0123456789";
 
 
-
-
+    /**
+     * Fills all textfields with a test string, selects not empty option of all selects, adds a address and tries to
+     * save entry.
+     *
+     * @param content the current content of the page. Need to be a craete-form
+     */
     public static void fillCreatePage(Content content) {
-
-        List<WebElement> textfields = content.getTextfields();
-        List<WebElement> selects = content.getSelects();
-
-        List<WebElement> subPageButtons = content.getSubPageButtons();
 
 
         // Textfelder mit TESTSTRING füllen
+        List<WebElement> textfields = content.getTextfields();
         for (WebElement tf : textfields) {
             UIOperation.typeInTextfield(tf, TESTSTRING);
         }
 
         // nicht leere option aus select wählen
+        List<WebElement> selects = content.getSelects();
         for (WebElement select : selects) {
             List<WebElement> options = new Select(select).getOptions();
             for (WebElement option : options) {
@@ -46,18 +48,10 @@ public class ContentOperation {
             }
         }
 
-
-        if (subPageButtons != null) {
-            // Adresse hinzufügen
-            for (WebElement supPageButton : subPageButtons) {
-                System.out.println("ID: " + supPageButton.getAttribute("id"));
-                if (supPageButton.getAttribute("id").contains("AddressSet")) {
-                    UIOperation.click(supPageButton);
-                    addAddress(new AddressContent(content.getPage()));
-                }
-            }
-
-
+        // Adresse hinzufügen, falls vorhanden
+        if (content.getAddAddressButton() != null) {
+            UIOperation.click(content.getAddAddressButton());
+            addAddress(new AddressContent(content.getPage()));
         }
 
         String headlineBeforeSubmit = content.getHeadlineText();
@@ -70,17 +64,21 @@ public class ContentOperation {
 
         // test durch Inhaltsüberschrift, ob gleiche seite noch present
         if (headlineBeforeSubmit.equals(content.getHeadlineText()))
-            throw new RuntimeException("Headline after equals headline before click on continue. "
-                    + "Form filled incorrectly or entry to create already exists?");
+            throw new RuntimeException("Headlines before and after are the same. "
+                    + "Form filled incorrectly or entry to create already exists.");
 
-
+        // klick auf speichern
         if (content.getSaveButton() != null) {
             UIOperation.click(content.getSaveButton());
         } else
-            throw new RuntimeException("Couldn't save create operation. No save button found.");
+            throw new RuntimeException("Couldn't save entry. No save button found.");
 
     }
 
+    /**
+     * Adds a new address with test input.
+     * @param addressContent the content need to be the address edit page.
+     */
     public static void addAddress(AddressContent addressContent) {
 
         // klick auf hinzufügen

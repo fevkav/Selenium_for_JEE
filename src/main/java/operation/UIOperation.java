@@ -10,6 +10,7 @@ import java.util.List;
  * This class provides basic operations to interact with the given page object, e.g. to type keys in a textinput field.
  */
 public class UIOperation {
+
     /**
      * @param textinput Text input field
      * @param keys      the string to type in
@@ -65,6 +66,11 @@ public class UIOperation {
 
     }
 
+    /**
+     * @param select have to be a select tag
+     * @return all visible texts of the options in given WebElement
+     * @throws org.openqa.selenium.support.ui.UnexpectedTagNameException
+     */
     public static List<String> getOptionsVisibleTextsFromSelect(WebElement select) {
         Select selectElement = new Select(select);
         List<WebElement> options = selectElement.getOptions();
@@ -76,6 +82,10 @@ public class UIOperation {
         return optionsString;
     }
 
+    /**
+     * A simple click on the given WebElement
+     * @param element
+     */
     public static void click(WebElement element) {
         element.click();
     }

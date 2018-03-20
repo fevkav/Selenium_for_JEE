@@ -8,8 +8,6 @@ import java.util.List;
 
 public class Content {
 
-    private List<WebElement> elements;
-
     private Page page;
 
     @FindBy(tagName = "h3")
@@ -29,6 +27,12 @@ public class Content {
 
     @FindBy(css = "div.mchsSubPageButton > input")
     private List<WebElement> subPageButtons;
+
+    @FindBy(xpath = "//input[contains(@id, \"AddressSetSubmit\")]")
+    private WebElement addAddressButton;
+
+    @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")
+    private WebElement saveButton;
 
     /**
      * Links with a icon (view or edit link)
@@ -83,20 +87,21 @@ public class Content {
                 if (textfield.isDisplayed())
                     System.out.println("WARNING: No label found for element with name: " + textfield.getAttribute("name"));
             }
-
         }
-
     }
 
-
+    /**
+     * @return
+     */
     public String getHeadlineText() {
         return headline.getText();
     }
 
-    public List<WebElement> getSubmitButtons() {
-        return submitButtons;
-    }
 
+    /**
+     *
+     * @return the headline displayed as usually a h3 tag in the current viewed page.
+     */
     public WebElement getContinueButton() {
 
         for (WebElement webElement : submitButtons) {
@@ -109,18 +114,7 @@ public class Content {
     }
 
     public WebElement getSaveButton() {
-
-        for (WebElement webElement : submitButtons) {
-            if (webElement.getAttribute("value").contains("Speichern")) {
-                return webElement;
-            }
-        }
-
-        return null;
-    }
-
-    public List<WebElement> getSubPageButtons() {
-        return subPageButtons;
+        return saveButton;
     }
 
     public List<WebElement> getLabels() {
@@ -137,6 +131,10 @@ public class Content {
 
     public List<WebElement> getSelects() {
         return selects;
+    }
+
+    public WebElement getAddAddressButton() {
+        return addAddressButton;
     }
 
     public Page getPage() {

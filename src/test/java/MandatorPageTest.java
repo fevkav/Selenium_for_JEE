@@ -1,4 +1,3 @@
-
 import operation.PageOperation;
 import operation.UIOperation;
 import org.junit.After;
@@ -11,7 +10,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.equalTo;
 
 
 public class MandatorPageTest {
@@ -55,25 +55,7 @@ public class MandatorPageTest {
                 equalTo("Währung zuweisen"));
     }
 
-    @Test
-    public void checkSubmitButtonsInBuchenFreigeben() {
-        PageOperation.clickMainNaviThenSubmenu(mandatorPage,
-                "Buchen", "Daten freigeben");
 
-        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().size(), is(3));
-        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().get(0).getAttribute("value"),
-                is("Freigeben"));
-        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().get(1).getAttribute("value"),
-                is("Ablehnen"));
-        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().get(2).getAttribute("value"),
-                is("Abbrechen"));
-    }
-
-    @Test
-    public void checkSubmitButtonsInAPageWithoutButtons() {
-        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Bank", "Ansehen");
-        assertThat(mandatorPage.getCurrentContent().getSubmitButtons().isEmpty(), is(true));
-    }
 
 
     @After

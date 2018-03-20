@@ -25,11 +25,11 @@ public class PageOperation {
     }
 
     /**
-     * Starts the WebDriver, navigates to login page, logs in and selects Role
+     * Starts the WebDriver, navigates to login page, logs in and selects role.
      *
      * @param role   the role to select
      * @param driver Webdriver to use
-     * @return current page
+     * @return the page, after selected given role
      */
     public static Page startLoginSelectRole(String role, WebDriver driver) {
         LoginPage loginPage = new LoginPage(driver);
@@ -38,6 +38,14 @@ public class PageOperation {
         return rolePage.selectRole(role);
     }
 
+    /**
+     * Clicks on the given main navi and then on the given submenu.
+     *
+     * @param page             the current page.
+     * @param mainNaviLinkText the visible link text of the main navi in the current page to be clicked
+     * @param submenuLinkText  the visible link text of the submenu of the given main navi.     *
+     * @throws org.openqa.selenium.NoSuchElementException if given linktexts couldn't have been found.
+     */
     public static void clickMainNaviThenSubmenu(Page page, String mainNaviLinkText, String submenuLinkText) {
 
         WebElement mainNavi = ((RolePage) page).getMainNaviItemElementByLinkText(mainNaviLinkText);
@@ -71,6 +79,12 @@ public class PageOperation {
     }
 
 
+    /**
+     * Clicks on all main navi links.
+     *
+     * @param page current page
+     * @return the visible link texts of all main links
+     */
     public static List<String> clickOnAllMainNavisAndReturnLinkTexts(RolePage page) {
 
         int mainNavisSize = page.getAllMainNaviItems().size();
@@ -86,6 +100,13 @@ public class PageOperation {
         return links;
     }
 
+    /**
+     * Finds main navis with a create submenu.
+     * @param page current page
+     * @return found submenu WebElements
+     *
+     * @see getCreateSubmenu() in Rolepage
+     */
     public static List<WebElement> getMainNavisWithCreateSubmenu(RolePage page) {
 
         int numberOfMainNavis = page.getAllMainNaviItems().size();

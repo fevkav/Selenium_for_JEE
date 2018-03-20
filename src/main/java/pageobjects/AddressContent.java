@@ -5,30 +5,27 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
+/**
+ * Represents the address edit page.
+ */
 public class AddressContent extends Content {
 
     @FindBy(className = "mchsSetRecord2PerLine")
     private List<WebElement> adresses;
 
     @FindBy(id = "EditAddressTakeOnSubmit")
-    private WebElement applyButton;     // TODO andere buttons auch mit pagefactory holen
+    private WebElement applyButton;
+
+    @FindBy(id = "EditAddressSetAddSubmit")
+    private WebElement addButton;
 
 
     public AddressContent(Page page) {
         super(page);
     }
 
-    public boolean containsContactEntry() {
-        return adresses != null;
-    }
-
     public WebElement getAddButton() {
-        for (WebElement addButton : submitButtons) {
-            if (addButton.getAttribute("value").contains("Hinzufügen")) {
-                return addButton;
-            }
-        }
-        return null;
+        return addButton;
     }
 
     public WebElement getApplyButton() {

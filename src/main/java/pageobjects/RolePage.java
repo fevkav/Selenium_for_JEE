@@ -23,8 +23,6 @@ public class RolePage extends Page {
 
     By subMenuItemLocator = By.cssSelector("div.mainNaviItemLevel2 > a.mainNaviItem");
 
-
-    //    @FindBy(className = "mainNaviItem") => falsch, findet auch submenus
     @FindBy(css = "div.mainNaviItemLevel1 > a.mainNaviItem")
     private List<WebElement> mainNaviItems;
 
@@ -121,10 +119,7 @@ public class RolePage extends Page {
         }
     }
 
-
-
     public List<String> getAllSubmenuItemLinkTexts(WebElement mainNaviElement) {
-
 
         List<String> linkTexts = new ArrayList<>();
         getSubMenuItems(mainNaviElement).forEach(item -> linkTexts.add(item.getText()));
