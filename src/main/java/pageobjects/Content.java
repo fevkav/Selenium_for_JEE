@@ -16,7 +16,7 @@ public class Content {
     private WebElement headline;
 
     @FindBy(xpath = "//input[@type=\"submit\"]")
-    private List<WebElement> submitButtons;
+    protected List<WebElement> submitButtons;
 
     @FindBy(xpath = "//input[@type=\"text\" and not(contains(@style, \"display: none\"))]")
     private List<WebElement> textfields;
@@ -26,6 +26,9 @@ public class Content {
 
     @FindBy(tagName = "select")
     private List<WebElement> selects;
+
+    @FindBy(css = "div.mchsSubPageButton > input")
+    private List<WebElement> subPageButtons;
 
     /**
      * Links with a icon (view or edit link)
@@ -37,6 +40,7 @@ public class Content {
         this.page = page;
         load();
     }
+
 
     protected Content load() {
 
@@ -115,6 +119,9 @@ public class Content {
         return null;
     }
 
+    public List<WebElement> getSubPageButtons() {
+        return subPageButtons;
+    }
 
     public List<WebElement> getLabels() {
         return labels;
@@ -130,5 +137,9 @@ public class Content {
 
     public List<WebElement> getSelects() {
         return selects;
+    }
+
+    public Page getPage() {
+        return page;
     }
 }

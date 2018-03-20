@@ -20,7 +20,7 @@ public class CreateEditDeletePagesTest {
     @BeforeClass
     public static void getMainNavisWithCreateSubmenu() {
         mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator", new ChromeDriver());
-        // nur um zu sehen, welche Seiten ein Anlegen unterpunkt haben
+        // hier: nur um gefundene navis auszugeben
 //        PageOperation.getMainNavisWithCreateSubmenu(mandatorPage);
     }
 
@@ -38,8 +38,14 @@ public class CreateEditDeletePagesTest {
 
         assertThat("headline mismatch. Might not have been saved.", mandatorPage.getCurrentContent().getHeadlineText()
                 , is("Ihre Daten wurden gespeichert!"));
+    }
 
+    @Test
+    public void fillOrganisationseinheitAnlegen() {
 
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Organisationseinheit", "Anlegen");
+
+        ContentOperation.fillCreatePage(mandatorPage.getCurrentContent());
     }
 
     @Test
