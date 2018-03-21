@@ -20,6 +20,7 @@ public class ContentOperation {
     private static final String TESTEMAIL = "test@test.de";
 
     private static final String TESTPHONE = "0123456789";
+    private static final String TESTDATE = "01.01.2018";
 
 
     /**
@@ -30,12 +31,22 @@ public class ContentOperation {
      */
     public static void fillCreatePage(Content content) {
 
+        if (!content.getHeadlineText().contains("anlegen"))
+            throw new RuntimeException("Headline does not contain \"anlegen\". Is current page a create page?");
 
-        // Textfelder mit TESTSTRING füllen
-        List<WebElement> textfields = content.getTextfields();
-        for (WebElement tf : textfields) {
+
+        // normale Textfelder mit String füllen
+        for (WebElement tf : content.getSimpleTextfields()) {
             UIOperation.typeInTextfield(tf, TESTSTRING);
         }
+
+        // Textfelder mit Datum füllen
+        if (content.hasDateFields()) {
+            for (WebElement tf : content.getDateTextfields()) {
+                UIOperation.typeInTextfield(tf, TESTDATE);
+            }
+        }
+
 
         // nicht leere option aus select wählen
         List<WebElement> selects = content.getSelects();
@@ -55,6 +66,7 @@ public class ContentOperation {
             UIOperation.click(addressButton);
             addAddress(new AddressContent(content.getPage()));
         } catch (NoSuchElementException e) {
+            System.out.println("WARNING: Content doesn't contain address add button");
         }
 
         String headlineBeforeSubmit = content.getHeadlineText();
@@ -77,9 +89,15 @@ public class ContentOperation {
             UIOperation.click(content.getSaveButton());
         } else
             throw new RuntimeException("Couldn't save entry. No save button found.");
-
     }
 
+
+    /**
+     * Returns all form validation messages appear after a incorrect form submit.
+     *
+     * @param content the current content of the page
+     * @return one line String of all validation messages.
+     */
     public static String getValidationMessages(Content content) {
         StringBuilder messages = new StringBuilder();
         for (WebElement messageDiv : content.getFormValidationMessages()) {
@@ -92,6 +110,7 @@ public class ContentOperation {
 
     /**
      * Adds a new address with test input.
+     *
      * @param addressContent the content need to be the address edit page.
      */
     public static void addAddress(AddressContent addressContent) {

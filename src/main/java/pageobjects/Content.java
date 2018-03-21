@@ -4,6 +4,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Content {
@@ -28,7 +29,9 @@ public class Content {
     @FindBy(css = "div.mchsSubPageButton > input")
     private List<WebElement> subPageButtons;
 
-    @FindBy(xpath = "//input[contains(@id, \"AddressSetSubmit\")]")
+
+    //    @FindBy(xpath = "//input[contains(@id, \"AddressSetSubmit\")]") bei gtu-versich. id=...AddressSubmit
+    @FindBy(xpath = "//input[contains(@id, \"Address\") and contains(@id, \"Submit\")]")
     private WebElement addAddressButton;
 
     @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")
@@ -42,6 +45,10 @@ public class Content {
      */
     @FindBy(className = "mchsIconLinkSmall")
     private List<WebElement> linkButtons;
+
+    private List<WebElement> simpleTextfields;
+    private List<WebElement> dateTextfields;
+    private boolean hasDateFields = false;
 
     public Content(Page page) {
         this.page = page;
@@ -97,17 +104,14 @@ public class Content {
     }
 
     /**
-     * @return
+     *
+     * @return the headline displayed as usually a h3 tag in the current viewed page.
      */
     public String getHeadlineText() {
         return headline.getText();
     }
 
 
-    /**
-     *
-     * @return the headline displayed as usually a h3 tag in the current viewed page.
-     */
     public WebElement getContinueButton() {
 
         for (WebElement webElement : submitButtons) {
@@ -119,6 +123,16 @@ public class Content {
         return null;
     }
 
+    public List<WebElement> getSimpleTextfields() {
+        splitSimpleAndDateTextfields();
+        return simpleTextfields;
+    }
+
+    public List<WebElement> getDateTextfields() {
+        splitSimpleAndDateTextfields();
+        return dateTextfields;
+    }
+
     public WebElement getSaveButton() {
         return saveButton;
     }
@@ -127,8 +141,20 @@ public class Content {
         return labels;
     }
 
-    public List<WebElement> getTextfields() {
-        return textfields;
+    private void splitSimpleAndDateTextfields() {
+
+        simpleTextfields = new ArrayList<>();
+        dateTextfields = new ArrayList<>();
+
+        for (WebElement tf : textfields) {
+            if (tf.getAttribute("class").contains("Date")
+                    || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date")) { // gtu-versich. abweichend
+                dateTextfields.add(tf);
+                hasDateFields = true;
+            } else {
+                simpleTextfields.add(tf);
+            }
+        }
     }
 
     public List<WebElement> getLinkButtons() {
@@ -141,6 +167,14 @@ public class Content {
 
     public WebElement getAddAddressButton() {
         return addAddressButton;
+    }
+
+    public boolean hasDateFields() {
+        return hasDateFields;
+    }
+
+    public List<WebElement> getTextfields() {
+        return textfields;
     }
 
     public Page getPage() {

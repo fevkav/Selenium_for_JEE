@@ -1,5 +1,6 @@
 import operation.ContentOperation;
 import operation.PageOperation;
+import operation.UIOperation;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -9,15 +10,14 @@ import pageobjects.MandatorPage;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class CreateEditDeletePagesTest {
+public class CreatePagesFillFormTest {
 
     private static MandatorPage mandatorPage;
 
     @BeforeClass
     public static void getMainNavisWithCreateSubmenu() {
         mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator", new ChromeDriver());
-        // hier: nur um gefundene navis auszugeben
-//        PageOperation.getMainNavisWithCreateSubmenu(mandatorPage);
+
     }
 
     @AfterClass
@@ -39,7 +39,7 @@ public class CreateEditDeletePagesTest {
     @Test
     public void fillOrganisationseinheitAnlegen() {
 
-        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Organisationseinheit", "asdasd");
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Organisationseinheit", "Anlegen");
 
         ContentOperation.fillCreatePage(mandatorPage.getCurrentContent());
 
@@ -47,16 +47,32 @@ public class CreateEditDeletePagesTest {
                 , is("Ihre Daten wurden gespeichert!"));
     }
 
-    @Test
+
+    @Test//(expected = RuntimeException.class)
+    public void fillGTUVersicherungenAnlegenShouldFail() {
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "GTU-Versicherungen", "Anlegen");
+
+        // auf den als erstes aufgelisteten Geldtransportunternehmen klicken, um auf anlegen formular zu gelangen.
+        UIOperation.click(mandatorPage.getCurrentContent().getLinkButtons().get(0));
+
+        ContentOperation.fillCreatePage(mandatorPage.getCurrentContent());
+
+
+    }
+
+    //    @Test
     public void editBankkontoTest() {
         PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Bankkonto", "Bearbeiten");
-
-
 
         assertThat("headline mismatch. Might not have been editted.", mandatorPage.getCurrentContent().getHeadlineText()
                 , is("Ihre Daten wurden gespeichert!"));
 
+    }
 
+
+    //    @Test
+    public void findPagesWithCreateSubmenu() {
+        PageOperation.getMainNavisWithCreateSubmenu(mandatorPage);
     }
 
 }

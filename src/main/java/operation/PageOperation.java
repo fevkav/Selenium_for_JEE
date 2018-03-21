@@ -80,7 +80,7 @@ public class PageOperation {
 
 
     /**
-     * Clicks on all main navi links.
+     * Clicks through all main navis and prints all find main navi link texts with a create submenu.
      *
      * @param page current page
      * @return the visible link texts of all main links
