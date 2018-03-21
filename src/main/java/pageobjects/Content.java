@@ -46,8 +46,6 @@ public class Content {
     @FindBy(className = "mchsIconLinkSmall")
     private List<WebElement> linkButtons;
 
-    private List<WebElement> simpleTextfields;
-    private List<WebElement> dateTextfields;
     private boolean hasDateFields = false;
 
     public Content(Page page) {
@@ -124,12 +122,27 @@ public class Content {
     }
 
     public List<WebElement> getSimpleTextfields() {
-        splitSimpleAndDateTextfields();
+        List<WebElement> simpleTextfields = new ArrayList<>();
+
+        for (WebElement tf : textfields) {
+            if (!(tf.getAttribute("class").contains("Date")
+                    || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date"))) { // gtu-versich. abweichend
+                simpleTextfields.add(tf);
+            }
+        }
         return simpleTextfields;
     }
 
     public List<WebElement> getDateTextfields() {
-        splitSimpleAndDateTextfields();
+
+        List<WebElement> dateTextfields = new ArrayList<>();
+        for (WebElement tf : textfields) {
+            if (tf.getAttribute("class").contains("Date")
+                    || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date")) { // gtu-versich. abweichend
+                dateTextfields.add(tf);
+            }
+        }
+        hasDateFields = !dateTextfields.isEmpty();
         return dateTextfields;
     }
 
@@ -141,21 +154,6 @@ public class Content {
         return labels;
     }
 
-    private void splitSimpleAndDateTextfields() {
-
-        simpleTextfields = new ArrayList<>();
-        dateTextfields = new ArrayList<>();
-
-        for (WebElement tf : textfields) {
-            if (tf.getAttribute("class").contains("Date")
-                    || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date")) { // gtu-versich. abweichend
-                dateTextfields.add(tf);
-                hasDateFields = true;
-            } else {
-                simpleTextfields.add(tf);
-            }
-        }
-    }
 
     public List<WebElement> getLinkButtons() {
         return linkButtons;
