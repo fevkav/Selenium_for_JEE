@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ContentOperation {
 
-    private static final String TESTSTRING = "Testinput";
+    private static final String TESTSTRING = "Testinput2";
 
     private static final String TESTZIPCODE = "00000";
 
@@ -21,6 +21,7 @@ public class ContentOperation {
 
     private static final String TESTPHONE = "0123456789";
     private static final String TESTDATE = "01.01.2018";
+
 
 
     /**
@@ -36,29 +37,14 @@ public class ContentOperation {
 
 
         // normale Textfelder mit String füllen
-        for (WebElement tf : content.getSimpleTextfields()) {
-            UIOperation.typeInTextfield(tf, TESTSTRING);
-        }
+        fillSimpleTextfields(content);
 
         // Textfelder mit Datum füllen
-        if (content.hasDateFields()) {
-            for (WebElement tf : content.getDateTextfields()) {
-                UIOperation.typeInTextfield(tf, TESTDATE);
-            }
-        }
+        fillDateTextfields(content);
 
 
         // nicht leere option aus select wählen
-        List<WebElement> selects = content.getSelects();
-        for (WebElement select : selects) {
-            List<WebElement> options = new Select(select).getOptions();
-            for (WebElement option : options) {
-                if (!(option.getText().equals("") || option.getText().equals(" "))) {
-                    UIOperation.selectOptionFromSelectElement(select, option.getAttribute("value"));
-                    break;
-                }
-            }
-        }
+        selectOption(content);
 
         // Adresse hinzufügen, falls im formular erforderlich
         try {
@@ -66,12 +52,26 @@ public class ContentOperation {
             UIOperation.click(addressButton);
             addAddress(new AddressContent(content.getPage()));
         } catch (NoSuchElementException e) {
-            System.out.println("WARNING: Content doesn't contain address add button");
+            System.out.println("WARNING: Create page doesn't contain address add button");
         }
 
         String headlineBeforeSubmit = content.getHeadlineText();
 
         // falls vorhanden auf weiter klicken
+        clickContinueAndCheckHeadlines(content, headlineBeforeSubmit);
+
+        // klick auf speichern
+        clickSaveButton(content);
+    }
+
+    public static void clickSaveButton(Content content) {
+        if (content.getSaveButton() != null) {
+            UIOperation.click(content.getSaveButton());
+        } else
+            throw new RuntimeException("Couldn't save entry. No save button found.");
+    }
+
+    public static void clickContinueAndCheckHeadlines(Content content, String headlineBeforeSubmit) {
         if (content.getContinueButton() != null) {
             UIOperation.click(content.getContinueButton());
         } else
@@ -83,12 +83,33 @@ public class ContentOperation {
                     + "Form filled incorrectly or entry to create already exists. Form validation messages: "
                     + getValidationMessages(content));
         }
+    }
 
-        // klick auf speichern
-        if (content.getSaveButton() != null) {
-            UIOperation.click(content.getSaveButton());
-        } else
-            throw new RuntimeException("Couldn't save entry. No save button found.");
+    public static void selectOption(Content content) {
+        List<WebElement> selects = content.getSelects();
+        for (WebElement select : selects) {
+            List<WebElement> options = new Select(select).getOptions();
+            for (WebElement option : options) {
+                if (!(option.getText().equals("") || option.getText().equals(" "))) {
+                    UIOperation.selectOptionFromSelectElement(select, option.getAttribute("value"));
+                    break;
+                }
+            }
+        }
+    }
+
+    public static void fillDateTextfields(Content content) {
+        if (content.hasDateFields()) {
+            for (WebElement tf : content.getDateTextfields()) {
+                UIOperation.typeInTextfield(tf, TESTDATE);
+            }
+        }
+    }
+
+    public static void fillSimpleTextfields(Content content) {
+        for (WebElement tf : content.getSimpleTextfields()) {
+            UIOperation.typeInTextfield(tf, TESTSTRING);
+        }
     }
 
 

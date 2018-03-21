@@ -60,14 +60,6 @@ public class CreatePagesFillFormTest {
 
     }
 
-    //    @Test
-    public void editBankkontoTest() {
-        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Bankkonto", "Bearbeiten");
-
-        assertThat("headline mismatch. Might not have been editted.", mandatorPage.getCurrentContent().getHeadlineText()
-                , is("Ihre Daten wurden gespeichert!"));
-
-    }
 
 
     //    @Test
