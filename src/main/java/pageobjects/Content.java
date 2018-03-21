@@ -34,6 +34,9 @@ public class Content {
     @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")
     private WebElement saveButton;
 
+    @FindBy(className = "mchsValidationMessage")
+    private List<WebElement> formValidationMessages;
+
     /**
      * Links with a icon (view or edit link)
      */
@@ -45,6 +48,9 @@ public class Content {
         load();
     }
 
+    public List<WebElement> getFormValidationMessages() {
+        return formValidationMessages;
+    }
 
     protected Content load() {
 

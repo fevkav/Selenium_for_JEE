@@ -1,5 +1,6 @@
 package operation;
 
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import pageobjects.AddressContent;
@@ -48,10 +49,12 @@ public class ContentOperation {
             }
         }
 
-        // Adresse hinzufügen, falls vorhanden
-        if (content.getAddAddressButton() != null) {
-            UIOperation.click(content.getAddAddressButton());
+        // Adresse hinzufügen, falls im formular erforderlich
+        try {
+            WebElement addressButton = content.getAddAddressButton();
+            UIOperation.click(addressButton);
             addAddress(new AddressContent(content.getPage()));
+        } catch (NoSuchElementException e) {
         }
 
         String headlineBeforeSubmit = content.getHeadlineText();
@@ -63,9 +66,11 @@ public class ContentOperation {
             throw new RuntimeException("Couldn't submit create form. No continue button found.");
 
         // test durch Inhaltsüberschrift, ob gleiche seite noch present
-        if (headlineBeforeSubmit.equals(content.getHeadlineText()))
+        if (headlineBeforeSubmit.equals(content.getHeadlineText())) {
             throw new RuntimeException("Headlines before and after are the same. "
-                    + "Form filled incorrectly or entry to create already exists.");
+                    + "Form filled incorrectly or entry to create already exists. Form validation messages: "
+                    + getValidationMessages(content));
+        }
 
         // klick auf speichern
         if (content.getSaveButton() != null) {
@@ -73,6 +78,16 @@ public class ContentOperation {
         } else
             throw new RuntimeException("Couldn't save entry. No save button found.");
 
+    }
+
+    public static String getValidationMessages(Content content) {
+        StringBuilder messages = new StringBuilder();
+        for (WebElement messageDiv : content.getFormValidationMessages()) {
+            if (!messageDiv.getText().equals("") && !messageDiv.getText().equals(" ")) {
+                messages.append(messageDiv.getText()).append(" ");
+            }
+        }
+        return String.valueOf(messages);
     }
 
     /**
