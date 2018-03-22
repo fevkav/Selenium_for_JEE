@@ -102,7 +102,6 @@ public class Content {
     }
 
     /**
-     *
      * @return the headline displayed as usually a h3 tag in the current viewed page.
      */
     public String getHeadlineText() {
@@ -121,18 +120,31 @@ public class Content {
         return null;
     }
 
+    /**
+     * A simple textfield is a textinput field, where usually a "word" ist expected, e.g. name.
+     *
+     * @return one-line textfields
+     */
     public List<WebElement> getSimpleTextfields() {
         List<WebElement> simpleTextfields = new ArrayList<>();
 
         for (WebElement tf : textfields) {
-            if (!(tf.getAttribute("class").contains("Date")
-                    || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date"))) { // gtu-versich. abweichend
+            try {
+                if (!(tf.getAttribute("class").contains("Date")
+                        || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date"))) { // gtu-versich. abweichend
+                    simpleTextfields.add(tf);
+                }
+            } catch (NullPointerException e) {
                 simpleTextfields.add(tf);
             }
         }
         return simpleTextfields;
     }
 
+    /**
+     * A date textfield is a textinput field, where a date (dd.mm.jjjj) is expected.
+     * @return
+     */
     public List<WebElement> getDateTextfields() {
 
         List<WebElement> dateTextfields = new ArrayList<>();
