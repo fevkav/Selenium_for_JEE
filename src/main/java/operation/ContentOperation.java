@@ -44,16 +44,11 @@ public class ContentOperation {
 
 
         // nicht leere option aus select wählen
-        selectOption(content);
+        selectNotEmptyOptionOfSelects(content);
 
         // Adresse hinzufügen, falls im formular erforderlich
-        try {
-            WebElement addressButton = content.getAddAddressButton();
-            UIOperation.click(addressButton);
-            addAddress(new AddressContent(content.getPage()));
-        } catch (NoSuchElementException e) {
-            System.out.println("WARNING: Create page doesn't contain address add button");
-        }
+        addAddress(new AddressContent(content.getPage()));
+
 
         String headlineBeforeSubmit = content.getHeadlineText();
 
@@ -85,7 +80,7 @@ public class ContentOperation {
         }
     }
 
-    public static void selectOption(Content content) {
+    public static void selectNotEmptyOptionOfSelects(Content content) {
         List<WebElement> selects = content.getSelects();
         for (WebElement select : selects) {
             List<WebElement> options = new Select(select).getOptions();
@@ -107,6 +102,7 @@ public class ContentOperation {
     }
 
     public static void fillSimpleTextfields(Content content) {
+
         for (WebElement tf : content.getSimpleTextfields()) {
             UIOperation.typeInTextfield(tf, TESTSTRING);
         }
@@ -135,6 +131,14 @@ public class ContentOperation {
      * @param addressContent the content need to be the address edit page.
      */
     public static void addAddress(AddressContent addressContent) {
+
+        try {
+            WebElement addressButton = addressContent.getAddAddressButton();
+            UIOperation.click(addressButton);
+        } catch (NoSuchElementException e) {
+            System.out.println("WARNING: Create page doesn't contain address add button");
+            return;
+        }
 
         // klick auf hinzufügen
         if (addressContent.getAddButton() == null)
