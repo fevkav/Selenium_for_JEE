@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import pageobjects.AddressContent;
 import pageobjects.Content;
 import pageobjects.MandatorPage;
@@ -22,7 +21,7 @@ public class CreatePagesFillFormTest {
 
     @BeforeClass
     public static void getMainNavisWithCreateSubmenu() {
-        mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator", new ChromeDriver());
+        mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator");
     }
 
     @AfterClass
@@ -43,7 +42,7 @@ public class CreatePagesFillFormTest {
 
         PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Bankkonto", "Anlegen");
 
-        ContentOperation.fillCreatePage(currentContent);
+        ContentOperation.fillCreatePageAndSave(currentContent);
 
         assertThat("headline mismatch. Might not have been saved.", currentContent.getHeadlineText()
                 , is("Ihre Daten wurden gespeichert!"));
@@ -53,11 +52,11 @@ public class CreatePagesFillFormTest {
      * fails, if already exists.
      */
     @Test
-    public void fillOrganisationseinheitAnlegen() {
+    public void fillOrganisationseinheitAnlegenAndSave() {
 
         PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Organisationseinheit", "Anlegen");
 
-        ContentOperation.fillCreatePage(currentContent);
+        ContentOperation.fillCreatePageAndSave(currentContent);
 
         assertThat("headline mismatch. Might not have been saved.", currentContent.getHeadlineText()
                 , is("Ihre Daten wurden gespeichert!"));
@@ -66,8 +65,8 @@ public class CreatePagesFillFormTest {
     /**
      * fails, if already exists
      */
-    @Test//(expected = RuntimeException.class)
-    public void fillGTUVersicherungenAnlegenShouldFail() {
+    @Test
+    public void fillGTUVersicherungenAnlegenAndSave() {
         PageOperation.clickMainNaviThenSubmenu(mandatorPage, "GTU-Versicherungen", "Anlegen");
 
         // auf den als erstes aufgelisteten Geldtransportunternehmen klicken, um auf anlegen formular zu gelangen.
@@ -88,11 +87,60 @@ public class CreatePagesFillFormTest {
 
         ContentOperation.addAddress(new AddressContent(mandatorPage));
 
-        String headlineBefore = currentContent.getHeadlineText();
-        ContentOperation.clickContinueAndCheckHeadlines(currentContent, headlineBefore);
+        ContentOperation.clickContinueAndCheckHeadlines(currentContent);
         ContentOperation.clickSaveButton(currentContent);
 
         assertThat(currentContent.getHeadlineText(), containsString("Ihre Daten wurden gespeichert!"));
+    }
+
+    @Test
+    public void fillGesellschaftAnlegenAndSave() {
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Gesellschaft", "Anlegen");
+
+        ContentOperation.fillSimpleTextfields(currentContent);
+
+        WebElement textfieldNumber = currentContent.getTextfieldById("AddSalesDivisionNummerText");
+        UIOperation.typeInTextfield(textfieldNumber, "0000");
+
+        WebElement textfieldPlanbarQuote = currentContent.getTextfieldById("AddSalesDivisionPlanBarQuotaText");
+        UIOperation.typeInTextfield(textfieldPlanbarQuote, "100");
+
+        WebElement selectDivision = currentContent.getSelectById("AddSalesDivision.jspOrgUnitIDSelect");
+        UIOperation.selectOptionByVisibleText(selectDivision, ContentOperation.TESTSTRING);
+
+        WebElement selectCurrency = currentContent.getSelectById("AddSalesDivision.jspCurrencyIdSelect");
+        UIOperation.selectOptionFromSelectElement(selectCurrency, 0);
+
+        ContentOperation.addAddress(new AddressContent(mandatorPage));
+
+
+        addRegistryEntry();
+
+        ContentOperation.clickContinueAndCheckHeadlines(currentContent);
+
+        ContentOperation.clickSaveButton(currentContent);
+
+        // TODO
+
+        assertThat(currentContent.getHeadlineText(), containsString("Ihre Daten wurden gespeichert!"));
+
+    }
+
+    // TODO auslagern?
+    private void addRegistryEntry() {
+
+        for (WebElement button : currentContent.getSubPageButtons()) {
+            if (button.getAttribute("id").contains("RegisterSubmit")) {
+                UIOperation.click(button);
+                break;
+            }
+        }
+
+        AddressContent registryContent = new AddressContent(mandatorPage);
+        ContentOperation.fillSimpleTextfields(registryContent);
+        ContentOperation.selectNotEmptyOptionOfSelects(registryContent);
+        UIOperation.click(registryContent.getApplyButton());
+
     }
 
     // nur um seiten mit anlegen option zu finden
