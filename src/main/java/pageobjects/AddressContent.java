@@ -13,7 +13,7 @@ public class AddressContent extends Content {
     @FindBy(className = "mchsSetRecord2PerLine")
     private List<WebElement> adresses;
 
-    @FindBy(id = "EditAddressTakeOnSubmit")
+    @FindBy(xpath = "//input[contains(@id, \"TakeOnSubmit\")]")
     private WebElement applyButton;
 
     @FindBy(id = "EditAddressSetAddSubmit")

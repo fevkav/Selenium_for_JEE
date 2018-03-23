@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ContentOperation {
 
-    private static final String TESTSTRING = "Testinput2";
+    public static final String TESTSTRING = "Testinput2";
 
     private static final String TESTZIPCODE = "00000";
 
@@ -25,12 +25,12 @@ public class ContentOperation {
 
 
     /**
-     * Fills all textfields with a test string, selects not empty option of all selects, adds a address and tries to
-     * save entry.
+     * A complete operation to fill all textfields with a test string, selects not empty option of all selects,
+     * add a address, if necessary and save entry.
      *
      * @param content the current content of the page. Need to be a craete-form
      */
-    public static void fillCreatePage(Content content) {
+    public static void fillCreatePageAndSave(Content content) {
 
         if (!content.getHeadlineText().contains("anlegen"))
             throw new RuntimeException("Headline does not contain \"anlegen\". Is current page a create page?");
@@ -49,11 +49,8 @@ public class ContentOperation {
         // Adresse hinzufügen, falls im formular erforderlich
         addAddress(new AddressContent(content.getPage()));
 
-
-        String headlineBeforeSubmit = content.getHeadlineText();
-
         // falls vorhanden auf weiter klicken
-        clickContinueAndCheckHeadlines(content, headlineBeforeSubmit);
+        clickContinueAndCheckHeadlines(content);
 
         // klick auf speichern
         clickSaveButton(content);
@@ -66,7 +63,16 @@ public class ContentOperation {
             throw new RuntimeException("Couldn't save entry. No save button found.");
     }
 
-    public static void clickContinueAndCheckHeadlines(Content content, String headlineBeforeSubmit) {
+    /**
+     * Should be invoked after filled form. Clicks on continue and checks headlines before and after, to check if form
+     * page is still present or the next page is loaded.
+     *
+     * @param content the current content with correctly filled form
+     */
+    public static void clickContinueAndCheckHeadlines(Content content) {
+
+        String headlineBeforeSubmit = content.getHeadlineText();
+
         if (content.getContinueButton() != null) {
             UIOperation.click(content.getContinueButton());
         } else
@@ -80,6 +86,10 @@ public class ContentOperation {
         }
     }
 
+    /**
+     * Selects the first found not empty option from all present selects.
+     * @param content the current content, containing the selects.
+     */
     public static void selectNotEmptyOptionOfSelects(Content content) {
         List<WebElement> selects = content.getSelects();
         for (WebElement select : selects) {
@@ -93,6 +103,10 @@ public class ContentOperation {
         }
     }
 
+    /**
+     * Fills textfields, where a date (dd.mm.jjjj) is expected.
+     * @param content
+     */
     public static void fillDateTextfields(Content content) {
         if (content.hasDateFields()) {
             for (WebElement tf : content.getDateTextfields()) {
@@ -126,14 +140,14 @@ public class ContentOperation {
     }
 
     /**
-     * Adds a new address with test input.
+     * A complete operation to add a address with testinput.
      *
-     * @param addressContent the content need to be the address edit page.
+     * @param subPageContent the content need to be the address edit page.
      */
-    public static void addAddress(AddressContent addressContent) {
+    public static void addAddress(AddressContent subPageContent) {
 
         try {
-            WebElement addressButton = addressContent.getAddAddressButton();
+            WebElement addressButton = subPageContent.getEditAddressButton();
             UIOperation.click(addressButton);
         } catch (NoSuchElementException e) {
             System.out.println("WARNING: Create page doesn't contain address add button");
@@ -141,12 +155,12 @@ public class ContentOperation {
         }
 
         // klick auf hinzufügen
-        if (addressContent.getAddButton() == null)
+        if (subPageContent.getAddButton() == null)
             throw new RuntimeException("No add button found in address edit page.");
-        UIOperation.click(addressContent.getAddButton());
+        UIOperation.click(subPageContent.getAddButton());
 
         // fülle alle textfelder
-        for (WebElement textfield : addressContent.getTextfields()) {
+        for (WebElement textfield : subPageContent.getTextfields()) {
             if (textfield.getAttribute("id").contains("ZipCode"))
                 UIOperation.typeInTextfield(textfield, TESTZIPCODE);
             else if (textfield.getAttribute("id").contains("AddressGeo"))
@@ -161,7 +175,7 @@ public class ContentOperation {
         }
 
         // nicht leere option aus select wählen
-        for (WebElement select : addressContent.getSelects()) {
+        for (WebElement select : subPageContent.getSelects()) {
             List<WebElement> options = new Select(select).getOptions();
             for (WebElement option : options) {
                 if (!(option.getText().equals("") || option.getText().equals(" "))) {
@@ -171,22 +185,22 @@ public class ContentOperation {
             }
         }
 
-        String headlineBeforeApply = addressContent.getHeadlineText();
+        String headlineBeforeApply = subPageContent.getHeadlineText();
 
         // klicke auf Übernehmen
-        if (addressContent.getApplyButton() == null)
+        if (subPageContent.getApplyButton() == null)
             throw new RuntimeException("No apply button found in address edit page.");
-        UIOperation.click(addressContent.getApplyButton());
+        UIOperation.click(subPageContent.getApplyButton());
 
 
         // Test durch headline, ob gleiche seite noch present
-        if (headlineBeforeApply.equals(addressContent.getHeadlineText()))
+        if (headlineBeforeApply.equals(subPageContent.getHeadlineText()))
             throw new RuntimeException("Headline after equals headline before click on apply. Form filled incorrectly?");
 
         // klicke auf weiter
-        if (addressContent.getContinueButton() == null)
+        if (subPageContent.getContinueButton() == null)
             throw new RuntimeException("continue button not found.");
-        UIOperation.click(addressContent.getContinueButton());
+        UIOperation.click(subPageContent.getContinueButton());
 
 
     }

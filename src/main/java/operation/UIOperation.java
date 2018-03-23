@@ -25,6 +25,7 @@ public class UIOperation {
 
         textinput.clear();
         textinput.sendKeys(keys);
+        System.out.println("type keys in textfield id: " + textinput.getAttribute("id"));
     }
 
     /**

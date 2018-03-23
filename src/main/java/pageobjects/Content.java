@@ -32,7 +32,7 @@ public class Content {
 
     //    @FindBy(xpath = "//input[contains(@id, \"AddressSetSubmit\")]") bei gtu-versich. id=...AddressSubmit
     @FindBy(xpath = "//input[contains(@id, \"Address\") and contains(@id, \"Submit\")]")
-    private WebElement addAddressButton;
+    private WebElement editAddressButton;
 
     @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")
     private WebElement saveButton;
@@ -143,7 +143,8 @@ public class Content {
 
     /**
      * A date textfield is a textinput field, where a date (dd.mm.jjjj) is expected.
-     * @return
+     *
+     * @return textinputfields with name attribute contains "runTime" or "Date" or class attribute contains "Date".
      */
     public List<WebElement> getDateTextfields() {
 
@@ -175,8 +176,16 @@ public class Content {
         return selects;
     }
 
-    public WebElement getAddAddressButton() {
-        return addAddressButton;
+    public WebElement getSelectById(String id) {
+        for (WebElement tf : selects) {
+            if (tf.getAttribute("id").equals(id))
+                return tf;
+        }
+        return null;
+    }
+
+    public WebElement getEditAddressButton() {
+        return editAddressButton;
     }
 
     public boolean hasDateFields() {
@@ -187,7 +196,23 @@ public class Content {
         return textfields;
     }
 
+    public WebElement getTextfieldById(String id) {
+        for (WebElement tf : textfields) {
+            if (tf.getAttribute("id").equals(id))
+                return tf;
+        }
+        return null;
+    }
+
     public Page getPage() {
         return page;
+    }
+
+    public List<WebElement> getSubPageButtons() {
+        return subPageButtons;
+    }
+
+    public List<WebElement> getSubmitButtons() {
+        return submitButtons;
     }
 }
