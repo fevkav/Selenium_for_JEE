@@ -3,8 +3,8 @@ package operation;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import pageobjects.AddressContent;
 import pageobjects.Content;
+import pageobjects.SubPageContent;
 
 import java.util.List;
 
@@ -21,7 +21,6 @@ public class ContentOperation {
 
     private static final String TESTPHONE = "0123456789";
     private static final String TESTDATE = "02.01.2018";
-
 
 
     /**
@@ -47,7 +46,7 @@ public class ContentOperation {
         selectNotEmptyOptionOfSelects(content);
 
         // Adresse hinzufügen, falls im formular erforderlich
-        addAddress(new AddressContent(content.getPage()));
+        addAddress(new SubPageContent(content.getPage()));
 
         // falls vorhanden auf weiter klicken
         clickContinueAndCheckHeadlines(content);
@@ -88,6 +87,7 @@ public class ContentOperation {
 
     /**
      * Selects the first found not empty option from all present selects.
+     *
      * @param content the current content, containing the selects.
      */
     public static void selectNotEmptyOptionOfSelects(Content content) {
@@ -105,14 +105,16 @@ public class ContentOperation {
 
     /**
      * Fills textfields, where a date (dd.mm.jjjj) is expected.
+     *
      * @param content
      */
     public static void fillDateTextfields(Content content) {
-        if (content.hasDateFields()) {
-            for (WebElement tf : content.getDateTextfields()) {
-                UIOperation.typeInTextfield(tf, TESTDATE);
-            }
+
+
+        for (WebElement tf : content.getDateTextfields()) {
+            UIOperation.typeInTextfield(tf, TESTDATE);
         }
+
     }
 
     public static void fillSimpleTextfields(Content content) {
@@ -142,9 +144,9 @@ public class ContentOperation {
     /**
      * A complete operation to add a address with testinput.
      *
-     * @param subPageContent the content need to be the address edit page.
+     * @param subPageContent the content needs to be the address edit page.
      */
-    public static void addAddress(AddressContent subPageContent) {
+    public static void addAddress(SubPageContent subPageContent) {
 
         try {
             WebElement addressButton = subPageContent.getEditAddressButton();
@@ -174,15 +176,10 @@ public class ContentOperation {
                 UIOperation.typeInTextfield(textfield, TESTSTRING);
         }
 
-        // nicht leere option aus select wählen
+        // letzte option aus select wählen
         for (WebElement select : subPageContent.getSelects()) {
             List<WebElement> options = new Select(select).getOptions();
-            for (WebElement option : options) {
-                if (!(option.getText().equals("") || option.getText().equals(" "))) {
-                    UIOperation.selectOptionFromSelectElement(select, option.getAttribute("value"));
-                    break;
-                }
-            }
+            UIOperation.selectOptionFromSelectElement(select, options.size() - 1);
         }
 
         String headlineBeforeApply = subPageContent.getHeadlineText();
@@ -201,6 +198,18 @@ public class ContentOperation {
         if (subPageContent.getContinueButton() == null)
             throw new RuntimeException("continue button not found.");
         UIOperation.click(subPageContent.getContinueButton());
+
+
+    }
+
+    public static void editCalendar(SubPageContent calendarContent) {
+
+        WebElement selectRegion = calendarContent.getSelectById("EditCalendarCalendarIdSelect");
+
+        // zweite option wählen
+        UIOperation.selectOptionFromSelectElement(calendarContent.getSelectById("EditCalendarCalendarIdSelect"), 1);
+
+        UIOperation.click(calendarContent.getApplyButton());
 
 
     }
