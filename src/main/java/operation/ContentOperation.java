@@ -11,7 +11,7 @@ import java.util.List;
 
 public class ContentOperation {
 
-    public static final String TESTSTRING = "Testinput2";
+    public static final String TESTSTRING = "Testinput5";
 
     private static final String TESTZIPCODE = "00000";
 
@@ -20,7 +20,7 @@ public class ContentOperation {
     private static final String TESTEMAIL = "test@test.de";
 
     private static final String TESTPHONE = "0123456789";
-    private static final String TESTDATE = "01.01.2018";
+    private static final String TESTDATE = "02.01.2018";
 
 
 

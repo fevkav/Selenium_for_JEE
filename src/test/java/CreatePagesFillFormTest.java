@@ -79,7 +79,7 @@ public class CreatePagesFillFormTest {
             } else if (tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date")) {
                 UIOperation.typeInTextfield(tf, "01.01.2018");
             } else {
-                UIOperation.typeInTextfield(tf, "Testinput");
+                UIOperation.typeInTextfield(tf, ContentOperation.TESTSTRING);
             }
         }
 
@@ -93,19 +93,19 @@ public class CreatePagesFillFormTest {
         assertThat(currentContent.getHeadlineText(), containsString("Ihre Daten wurden gespeichert!"));
     }
 
+
+    /**
+     * Note: while using HtmlUnitDriver, textfields should be filled after the subpages are filled, because HtmlUnitdriver
+     * adds some spaces in textfield values after changing/reloading pages.
+     */
     @Test
     public void fillGesellschaftAnlegenAndSave() {
         PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Gesellschaft", "Anlegen");
 
-        ContentOperation.fillSimpleTextfields(currentContent);
-
-        WebElement textfieldNumber = currentContent.getTextfieldById("AddSalesDivisionNummerText");
-        UIOperation.typeInTextfield(textfieldNumber, "0000");
-
-        WebElement textfieldPlanbarQuote = currentContent.getTextfieldById("AddSalesDivisionPlanBarQuotaText");
-        UIOperation.typeInTextfield(textfieldPlanbarQuote, "100");
 
         WebElement selectDivision = currentContent.getSelectById("AddSalesDivision.jspOrgUnitIDSelect");
+
+        // zuvor erstellte Test-Organisationseinheit auswählen
         UIOperation.selectOptionByVisibleText(selectDivision, ContentOperation.TESTSTRING);
 
         WebElement selectCurrency = currentContent.getSelectById("AddSalesDivision.jspCurrencyIdSelect");
@@ -113,20 +113,28 @@ public class CreatePagesFillFormTest {
 
         ContentOperation.addAddress(new AddressContent(mandatorPage));
 
-
         addRegistryEntry();
+
+        for (WebElement tf : currentContent.getTextfields()) {
+            if (tf.getAttribute("id").equals("AddSalesDivisionNummerText"))
+                UIOperation.typeInTextfield(tf, "2222");
+            else if (tf.getAttribute("id").equals("AddSalesDivisionPlanBarQuotaText"))
+                UIOperation.typeInTextfield(tf, "100");
+            else if (tf.getAttribute("id").equals("AddSalesDivisionDateClosingText")) {/* do nothing */} else
+                UIOperation.typeInTextfield(tf, ContentOperation.TESTSTRING);
+        }
 
         ContentOperation.clickContinueAndCheckHeadlines(currentContent);
 
         ContentOperation.clickSaveButton(currentContent);
 
-        // TODO
-
-        assertThat(currentContent.getHeadlineText(), containsString("Ihre Daten wurden gespeichert!"));
+        // Dialog mit nachfrage zur erweiterung erscheint
+        assertThat(currentContent.getHeadlineText(), containsString("Erweitern der Gesellschaftsdaten"));
 
     }
 
-    // TODO auslagern?
+
+    // TODO auslagern
     private void addRegistryEntry() {
 
         for (WebElement button : currentContent.getSubPageButtons()) {
