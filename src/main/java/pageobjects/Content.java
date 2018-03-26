@@ -34,7 +34,9 @@ public class Content {
     @FindBy(xpath = "//input[contains(@id, \"Address\") and contains(@id, \"Submit\")]")
     private WebElement editAddressButton;
 
-    @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")
+
+    //    @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")  bei markt anlegen id=Save...Submit
+    @FindBy(xpath = "//input[contains(@value, \"Speichern\")]")
     private WebElement saveButton;
 
     @FindBy(className = "mchsValidationMessage")
@@ -45,8 +47,6 @@ public class Content {
      */
     @FindBy(className = "mchsIconLinkSmall")
     private List<WebElement> linkButtons;
-
-    private boolean hasDateFields = false;
 
     public Content(Page page) {
         this.page = page;
@@ -155,7 +155,6 @@ public class Content {
                 dateTextfields.add(tf);
             }
         }
-        hasDateFields = !dateTextfields.isEmpty();
         return dateTextfields;
     }
 
@@ -186,10 +185,6 @@ public class Content {
 
     public WebElement getEditAddressButton() {
         return editAddressButton;
-    }
-
-    public boolean hasDateFields() {
-        return hasDateFields;
     }
 
     public List<WebElement> getTextfields() {
