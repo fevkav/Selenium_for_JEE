@@ -3,15 +3,10 @@ package pageobjects;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.List;
-
 /**
  * Represents the address edit page.
  */
-public class AddressContent extends Content {
-
-    @FindBy(className = "mchsSetRecord2PerLine")
-    private List<WebElement> adresses;
+public class SubPageContent extends Content {
 
     @FindBy(xpath = "//input[contains(@id, \"TakeOnSubmit\")]")
     private WebElement applyButton;
@@ -20,7 +15,7 @@ public class AddressContent extends Content {
     private WebElement addButton;
 
 
-    public AddressContent(Page page) {
+    public SubPageContent(Page page) {
         super(page);
     }
 

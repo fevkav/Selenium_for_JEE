@@ -34,6 +34,9 @@ public class Content {
     @FindBy(xpath = "//input[contains(@id, \"Address\") and contains(@id, \"Submit\")]")
     private WebElement editAddressButton;
 
+    @FindBy(xpath = "//input[contains(@id, \"CalendarSubmit\")]")
+    private WebElement editCalendarButton;
+
 
     //    @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")  bei markt anlegen id=Save...Submit
     @FindBy(xpath = "//input[contains(@value, \"Speichern\")]")
@@ -205,6 +208,10 @@ public class Content {
 
     public List<WebElement> getSubPageButtons() {
         return subPageButtons;
+    }
+
+    public WebElement getEditCalendarButton() {
+        return editCalendarButton;
     }
 
     public List<WebElement> getSubmitButtons() {

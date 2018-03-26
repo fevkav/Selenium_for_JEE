@@ -20,7 +20,7 @@ public class UIOperation {
 
         if (!textinput.getTagName().equals("input") && !textinput.getAttribute("type").equals("text")) {
             throw new RuntimeException(
-                    "Given WebElement in typeInTextfield(WebElement, String) is not a textinput field");
+                    "Given WebElement is not a textinput field");
         }
 
         textinput.clear();

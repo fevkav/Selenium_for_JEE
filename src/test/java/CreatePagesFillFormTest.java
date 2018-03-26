@@ -140,12 +140,6 @@ public class CreatePagesFillFormTest {
 
         ContentOperation.addAddress(new SubPageContent(mandatorPage));
 
-        for (WebElement button : currentContent.getSubPageButtons()) {
-            if (button.getAttribute("id").contains("CalendarSubmit")) {
-                UIOperation.click(button);
-                break;
-            }
-        }
         ContentOperation.editCalendar(new SubPageContent(mandatorPage));
 
         ContentOperation.selectNotEmptyOptionOfSelects(currentContent);

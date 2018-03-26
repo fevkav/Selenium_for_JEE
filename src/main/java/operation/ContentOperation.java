@@ -79,14 +79,14 @@ public class ContentOperation {
 
         // test durch Inhaltsüberschrift, ob gleiche seite noch present
         if (headlineBeforeSubmit.equals(content.getHeadlineText())) {
-            throw new RuntimeException("Headlines before and after are the same. "
+            throw new RuntimeException("Headlines before and after click on continue are the same. "
                     + "Form filled incorrectly or entry to create already exists. Form validation messages: "
                     + getValidationMessages(content));
         }
     }
 
     /**
-     * Selects the first found not empty option from all present selects.
+     * Selects the first found, not empty option from all present selects.
      *
      * @param content the current content, containing the selects.
      */
@@ -204,7 +204,12 @@ public class ContentOperation {
 
     public static void editCalendar(SubPageContent calendarContent) {
 
-        WebElement selectRegion = calendarContent.getSelectById("EditCalendarCalendarIdSelect");
+        try {
+            WebElement calendarButton = calendarContent.getEditCalendarButton();
+            UIOperation.click(calendarButton);
+        } catch (NoSuchElementException e) {
+            return;
+        }
 
         // zweite option wählen
         UIOperation.selectOptionFromSelectElement(calendarContent.getSelectById("EditCalendarCalendarIdSelect"), 1);
