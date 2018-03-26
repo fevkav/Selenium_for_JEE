@@ -6,9 +6,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebElement;
-import pageobjects.AddressContent;
+import org.openqa.selenium.chrome.ChromeDriver;
 import pageobjects.Content;
 import pageobjects.MandatorPage;
+import pageobjects.SubPageContent;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -21,7 +22,7 @@ public class CreatePagesFillFormTest {
 
     @BeforeClass
     public static void getMainNavisWithCreateSubmenu() {
-        mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator");
+        mandatorPage = (MandatorPage) PageOperation.startLoginSelectRole("Mandator", new ChromeDriver());
     }
 
     @AfterClass
@@ -85,7 +86,7 @@ public class CreatePagesFillFormTest {
 
         ContentOperation.selectNotEmptyOptionOfSelects(currentContent);
 
-        ContentOperation.addAddress(new AddressContent(mandatorPage));
+        ContentOperation.addAddress(new SubPageContent(mandatorPage));
 
         ContentOperation.clickContinueAndCheckHeadlines(currentContent);
         ContentOperation.clickSaveButton(currentContent);
@@ -111,7 +112,7 @@ public class CreatePagesFillFormTest {
         WebElement selectCurrency = currentContent.getSelectById("AddSalesDivision.jspCurrencyIdSelect");
         UIOperation.selectOptionFromSelectElement(selectCurrency, 0);
 
-        ContentOperation.addAddress(new AddressContent(mandatorPage));
+        ContentOperation.addAddress(new SubPageContent(mandatorPage));
 
         addRegistryEntry();
 
@@ -130,8 +131,43 @@ public class CreatePagesFillFormTest {
 
         // Dialog mit nachfrage zur erweiterung erscheint
         assertThat(currentContent.getHeadlineText(), containsString("Erweitern der Gesellschaftsdaten"));
+    }
+
+    @Test
+    public void fillMarktAnlegenAndSave() {
+
+        PageOperation.clickMainNaviThenSubmenu(mandatorPage, "Markt", "Anlegen");
+
+        ContentOperation.addAddress(new SubPageContent(mandatorPage));
+
+        for (WebElement button : currentContent.getSubPageButtons()) {
+            if (button.getAttribute("id").contains("CalendarSubmit")) {
+                UIOperation.click(button);
+                break;
+            }
+        }
+        ContentOperation.editCalendar(new SubPageContent(mandatorPage));
+
+        ContentOperation.selectNotEmptyOptionOfSelects(currentContent);
+
+
+        ContentOperation.fillSimpleTextfields(currentContent);
+        UIOperation.typeInTextfield(currentContent.getTextfieldById("AddStoreStoreNumberText"), "0000");
+        UIOperation.typeInTextfield(currentContent.getTextfieldById("AddStoreDateOpeningText"), "01.01.1991");
+
+
+        ContentOperation.clickContinueAndCheckHeadlines(currentContent);
+
+        ContentOperation.clickSaveButton(currentContent);
+
+
+        // Dialog mit nachfrage ob detaildaten angelegt werden soll
+        assertThat(currentContent.getHeadlineText(), containsString("Markt Detaildaten anlegen"));
+
 
     }
+
+
 
 
     // TODO auslagern
@@ -144,7 +180,7 @@ public class CreatePagesFillFormTest {
             }
         }
 
-        AddressContent registryContent = new AddressContent(mandatorPage);
+        SubPageContent registryContent = new SubPageContent(mandatorPage);
         ContentOperation.fillSimpleTextfields(registryContent);
         ContentOperation.selectNotEmptyOptionOfSelects(registryContent);
         UIOperation.click(registryContent.getApplyButton());
