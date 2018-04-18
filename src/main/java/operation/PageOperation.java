@@ -130,5 +130,17 @@ public class PageOperation {
         return mainNavisWithCreateSubmenu;
     }
 
+    public static void sleep(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void sleep() {
+        sleep(7000);
+    }
+
 
 }

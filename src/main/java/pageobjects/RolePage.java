@@ -70,12 +70,12 @@ public class RolePage extends Page {
         }
     }
 
-    public void changeRole(String role) {
+    public Page changeRole(String role) {
         WebElement roleChangebutton = wait.until(ExpectedConditions.elementToBeClickable(roleChangeButtonLocator));
         // TODO exception handling
 
         UIOperation.click(roleChangebutton);
-        selectRole(role);
+        return selectRole(role);
     }
 
 
@@ -112,8 +112,7 @@ public class RolePage extends Page {
     public WebElement getCreateSubmenu(WebElement mainNaviElement) {
         UIOperation.click(mainNaviElement);
         try {
-            WebElement submenu = driver.findElement(By.xpath("//a[contains(@href, \"add=click\")]"));
-            return submenu;
+            return driver.findElement(By.xpath("//a[contains(@href, \"add=click\")]"));
         } catch (Exception e) {
             return null;
         }

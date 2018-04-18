@@ -153,8 +153,12 @@ public class Content {
 
         List<WebElement> dateTextfields = new ArrayList<>();
         for (WebElement tf : textfields) {
-            if (tf.getAttribute("class").contains("Date")
-                    || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date")) { // gtu-versich. abweichend
+            try {
+                if (tf.getAttribute("class").contains("Date")
+                        || tf.getAttribute("name").contains("runTime") || tf.getAttribute("name").contains("Date")) { // gtu-versich. abweichend
+                    dateTextfields.add(tf);
+                }
+            } catch (NullPointerException e) {
                 dateTextfields.add(tf);
             }
         }
@@ -198,6 +202,14 @@ public class Content {
         for (WebElement tf : textfields) {
             if (tf.getAttribute("id").equals(id))
                 return tf;
+        }
+        return null;
+    }
+
+    public WebElement getButtonByValue(String value) {
+        for (WebElement button : submitButtons) {
+            if (button.getAttribute("value").equals(value))
+                return button;
         }
         return null;
     }
