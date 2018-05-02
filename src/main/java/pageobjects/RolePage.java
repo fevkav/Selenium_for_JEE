@@ -99,10 +99,6 @@ public class RolePage extends Page {
         return driver.findElement(By.linkText(linktext));
     }
 
-    private List<WebElement> getSubMenuItems(WebElement mainNaviElement) {
-        return driver.findElements(subMenuItemLocator);
-    }
-
     /**
      * First clicks on given main menu. then returns the "create" submenu, if exists.
      *
@@ -118,10 +114,10 @@ public class RolePage extends Page {
         }
     }
 
-    public List<String> getAllSubmenuItemLinkTexts(WebElement mainNaviElement) {
+    public List<String> getAllSubmenuItemLinkTexts() {
 
         List<String> linkTexts = new ArrayList<>();
-        getSubMenuItems(mainNaviElement).forEach(item -> linkTexts.add(item.getText()));
+        driver.findElements(subMenuItemLocator).forEach(item -> linkTexts.add(item.getText()));
         return linkTexts;
     }
 

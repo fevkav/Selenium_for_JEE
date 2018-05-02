@@ -1,4 +1,4 @@
-import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -31,8 +31,8 @@ public class CreatePagesOperatorTest {
         currentContent = operatorPage.getCurrentContent();
     }
 
-    @After
-    public void closeDriver() {
+    @AfterClass
+    public static void closeDriver() {
         operatorPage.quitDriver();
     }
 

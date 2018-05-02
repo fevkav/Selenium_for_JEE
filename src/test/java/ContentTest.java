@@ -2,13 +2,11 @@ import operation.PageOperation;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import pageobjects.MandatorPage;
 import pageobjects.RolePage;
 
-import java.util.List;
-
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 
 public class ContentTest {
 
@@ -45,14 +43,7 @@ public class ContentTest {
                 mandatorPage.getCurrentContent().getLinkButtons()), nullValue());
     }
 
-    @Test
-    public void clickAndCheckLinkTextsOfAllMainNaviElementsOfMandatorRole() {
 
-        List<String> linkTextsExpected = ((MandatorPage) mandatorPage).getGermanMainNavis();
-
-        assertThat("Wrong main navigation items", PageOperation.clickOnAllMainNavisAndReturnLinkTexts(mandatorPage),
-                containsInAnyOrder(linkTextsExpected.toArray()));
-    }
 
 
     @After

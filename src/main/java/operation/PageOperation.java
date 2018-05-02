@@ -7,7 +7,9 @@ import pageobjects.Page;
 import pageobjects.RolePage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PageOperation {
 
@@ -80,32 +82,43 @@ public class PageOperation {
 
 
     /**
-     * Clicks through all main navis and prints all find main navi link texts with a create submenu.
+     * Returns and prints the main menus and their submenus.
      *
      * @param page current page
-     * @return the visible link texts of all main links
+     * @return a map with all main linktexts. Key = main menu linktext, value = List of all submenu linktexts
      */
-    public static List<String> clickOnAllMainNavisAndReturnLinkTexts(RolePage page) {
+    public static Map<String, List<String>> getNavigationHierarchy(RolePage page) {
 
         int mainNavisSize = page.getAllMainNaviItems().size();
         List<WebElement> mainNavis;
-        List<String> links = new ArrayList<>();
-        // StateElementReferenceException. Nach jedem Klick auf MainNavi müssen Elemente erneut geholt werden.
+        Map<String, List<String>> links = new HashMap<>();
+
+
         for (int i = 0; i < mainNavisSize; i++) {
+
+            List<String> submenus = new ArrayList<>();
+            // StateElementReferenceException. Nach jedem Klick auf MainNavi müssen Elemente erneut geholt werden.
             mainNavis = page.getAllMainNaviItems();
+
             UIOperation.click(mainNavis.get(i));
-            System.out.println("clicked on " + mainNavis.get(i).getText());
-            links.add(mainNavis.get(i).getText());
+            System.out.print("main menu: " + mainNavis.get(i).getText() + " -> ");
+            page.getAllSubmenuItemLinkTexts().forEach(submenu -> {
+                System.out.print(submenu + ", ");
+                submenus.add(submenu);
+            });
+            System.out.println();
+            links.put(mainNavis.get(i).getText(), submenus);
+
         }
         return links;
     }
 
     /**
-     * Finds main navis with a create submenu.
+     * Finds main menus with a create submenu.
      * @param page current page
      * @return found submenu WebElements
      *
-     * @see getCreateSubmenu() in Rolepage
+     *
      */
     public static List<WebElement> getMainNavisWithCreateSubmenu(RolePage page) {
 
