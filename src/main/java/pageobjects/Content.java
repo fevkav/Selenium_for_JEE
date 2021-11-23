@@ -29,16 +29,12 @@ public class Content {
     @FindBy(css = "div.mchsSubPageButton > input")
     private List<WebElement> subPageButtons;
 
-
-    //    @FindBy(xpath = "//input[contains(@id, \"AddressSetSubmit\")]") bei gtu-versich. id=...AddressSubmit
     @FindBy(xpath = "//input[contains(@id, \"Address\") and contains(@id, \"Submit\")]")
     private WebElement editAddressButton;
 
     @FindBy(xpath = "//input[contains(@id, \"CalendarSubmit\")]")
     private WebElement editCalendarButton;
 
-
-    //    @FindBy(xpath = "//input[contains(@id, \"SaveSubmit\")]")  bei markt anlegen id=Save...Submit
     @FindBy(xpath = "//input[contains(@value, \"Speichern\")]")
     private WebElement saveButton;
 
@@ -71,13 +67,11 @@ public class Content {
      * Checks, if the found and displayed textfield's id corresponding to the for attribute of a label.
      */
     public void checkLabelsOfTextfields() {
-
         boolean foundLabel;
 
         for (WebElement textfield : textfields) {
             foundLabel = false;
             for (WebElement label : labels) {
-
                 try {
 
                     if (textfield.getAttribute("id").equals(label.getAttribute("for"))) {

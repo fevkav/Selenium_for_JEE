@@ -21,6 +21,7 @@ public class CreatePagesMandatorTest {
 
     public static final String IHRE_DATEN_WURDEN_GESPEICHERT = "Ihre Daten wurden gespeichert!";
     public static final String ANLEGEN = "Anlegen";
+    public static final String BANKKONTO = "Bankkonto";
     private static MandatorPage mandatorPage;
     private Content currentContent;
 
@@ -45,7 +46,7 @@ public class CreatePagesMandatorTest {
     @Test
     public void fillBankkontoAnlegenFormAndSave() {
 
-        clickMainNaviThenSubmenu(mandatorPage, "Bankkonto", ANLEGEN);
+        clickMainNaviThenSubmenu(mandatorPage, BANKKONTO, ANLEGEN);
 
         fillCreatePageAndSave(currentContent);
 

@@ -124,7 +124,6 @@ public class CreatePagesOperatorTest {
 
         assertThat(currentContent.getHeadlineText(), is(IHRE_DATEN_WURDEN_GESPEICHERT));
 
-
     }
 
 }

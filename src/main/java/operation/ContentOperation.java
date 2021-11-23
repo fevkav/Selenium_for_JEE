@@ -34,13 +34,11 @@ public class ContentOperation {
         if (!content.getHeadlineText().contains("anlegen"))
             throw new RuntimeException("Headline does not contain \"anlegen\". Is current page a create page?");
 
-
         // normale Textfelder mit String füllen
         fillSimpleTextfields(content);
 
         // Textfelder mit Datum füllen
         fillDateTextfields(content);
-
 
         // nicht leere option aus select wählen
         selectNotEmptyOptionOfSelects(content);
@@ -109,7 +107,6 @@ public class ContentOperation {
      * @param content
      */
     public static void fillDateTextfields(Content content) {
-
 
         for (WebElement tf : content.getDateTextfields()) {
             UIOperation.typeInTextfield(tf, TESTDATE);

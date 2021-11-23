@@ -25,6 +25,7 @@ public class PageTest {
         page = new MockPage();
     }
 
+
     @Test
     public void navigateToRootUrlTest() {
 

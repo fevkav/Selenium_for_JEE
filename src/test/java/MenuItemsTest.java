@@ -35,6 +35,7 @@ public class MenuItemsTest {
         assertThat(navigationActual, is(navigationExpected));
         assertThat(navigationActual.size(), is(navigationExpected.size()));
 
+
     }
 
     @Test

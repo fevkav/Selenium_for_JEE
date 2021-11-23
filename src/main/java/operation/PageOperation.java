@@ -49,17 +49,11 @@ public class PageOperation {
      * @throws org.openqa.selenium.NoSuchElementException if given linktexts couldn't have been found.
      */
     public static void clickMainNaviThenSubmenu(Page page, String mainNaviLinkText, String submenuLinkText) {
-
         WebElement mainNavi = ((RolePage) page).getMainNaviItemElementByLinkText(mainNaviLinkText);
-
         UIOperation.click(mainNavi);
-
         WebElement submenu = ((RolePage) page).getSubMenuItemElementByLinkText(submenuLinkText);
-
         UIOperation.click(submenu);
-
         ((RolePage) page).loadContent();
-
     }
 
     /**

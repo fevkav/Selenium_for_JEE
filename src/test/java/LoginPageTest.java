@@ -31,8 +31,6 @@ public class LoginPageTest {
 
         assertThat("Login failed! The page title ends with \"Login\"",
                 pageAfterLogin.getTitle(), not(endsWith("Login")));
-
-
     }
 
     @After
